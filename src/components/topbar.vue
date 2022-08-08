@@ -1,8 +1,8 @@
 <script>
-import simplebar from "simplebar-vue";
+// import simplebar from "simplebar-vue";
 export default {
   components: {
-    simplebar,
+    // simplebar,
   },
   data() {
     return {
@@ -139,7 +139,7 @@ export default {
         </button>
 
         <!-- App Search-->
-        <form class="app-search d-none d-lg-block">
+        <!-- <form class="app-search d-none d-lg-block">
           <div class="position-relative">
             <input
               type="text"
@@ -148,11 +148,11 @@ export default {
             />
             <span class="uil-search"></span>
           </div>
-        </form>
+        </form> -->
       </div>
 
       <div class="d-flex">
-        <b-dropdown
+        <!-- <b-dropdown
           variant="white"
           class="d-inline-block d-lg-none ms-2"
           toggle-class="header-item noti-icon"
@@ -179,9 +179,9 @@ export default {
               </div>
             </div>
           </form>
-        </b-dropdown>
+        </b-dropdown> -->
 
-        <b-dropdown variant="white" right toggle-class="header-item">
+        <!-- <b-dropdown variant="white" right toggle-class="header-item">
           <template v-slot:button-content>
             <img class :src="flag" alt="Header Language" height="16" />
             {{ text }}
@@ -202,9 +202,9 @@ export default {
             />
             <span class="align-middle">{{ entry.title }}</span>
           </b-dropdown-item>
-        </b-dropdown>
+        </b-dropdown> -->
 
-        <b-dropdown
+        <!-- <b-dropdown
           variant="white"
           class="d-none d-lg-inline-block ms-1"
           toggle-class="header-item noti-icon"
@@ -266,9 +266,9 @@ export default {
               </div>
             </div>
           </div>
-        </b-dropdown>
+        </b-dropdown> -->
 
-        <div class="dropdown d-none d-lg-inline-block ms-1">
+        <!-- <div class="dropdown d-none d-lg-inline-block ms-1">
           <button
             type="button"
             class="btn header-item noti-icon waves-effect"
@@ -277,9 +277,9 @@ export default {
           >
             <i class="uil-minus-path"></i>
           </button>
-        </div>
+        </div> -->
 
-        <b-dropdown
+        <!-- <b-dropdown
           variant="white"
           class="dropdown d-inline-block"
           toggle-class="header-item noti-icon"
@@ -313,7 +313,7 @@ export default {
                     class="avatar-title bg-primary rounded-circle font-size-16"
                   >
                     <i class="uil-shopping-basket"></i>
-                  </span>       
+                  </span>
                 </div>
                 <div class="media-body">
                   <h6 class="mt-0 mb-1">
@@ -413,7 +413,7 @@ export default {
               {{ $t("navbar.dropdown.notification.button") }}
             </a>
           </div>
-        </b-dropdown>
+        </b-dropdown> -->
 
         <b-dropdown
           class="d-inline-block"
@@ -469,10 +469,7 @@ export default {
               $t("navbar.dropdown.marcus.list.lockscreen")
             }}</span>
           </a>
-          <a
-            class="dropdown-item"
-            href="/logout"
-          >
+          <a class="dropdown-item" href="/logout">
             <i
               class="uil uil-sign-out-alt font-size-18 align-middle me-1 text-muted"
             ></i>
@@ -482,7 +479,7 @@ export default {
           </a>
         </b-dropdown>
 
-        <div class="dropdown d-inline-block">
+        <!-- <div class="dropdown d-inline-block">
           <button
             type="button"
             class="btn header-item noti-icon right-bar-toggle toggle-right"
@@ -490,7 +487,7 @@ export default {
           >
             <i class="uil-cog toggle-right"></i>
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
   </header>

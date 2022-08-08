@@ -124,6 +124,7 @@ export default {
                     <b-form-group id="input-group-2" class="mb-3">
                       <div class="float-end">
                         <router-link
+                          tabindex="-1"
                           to="/account/forgot-password"
                           class="text-muted"
                           >Forgot password?</router-link

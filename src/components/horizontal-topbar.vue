@@ -667,7 +667,7 @@ export default {
       </div>
     </div>
 
-   <div class="container-fluid">
+    <div class="container-fluid">
       <div class="topnav">
         <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
           <div class="collapse navbar-collapse" id="topnav-menu-content">
