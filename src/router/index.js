@@ -33,8 +33,6 @@ router.beforeEach(async (routeTo, routeFrom, next) => {
 
   if (!authRequired) return next();
 
-  console.log("before each", store.getters["auth/loggedIn"]);
-
   if (store.getters["auth/loggedIn"]) {
     const valid = await AuthService.validate();
     return valid ? next() : redirectToLogin();
@@ -45,6 +43,9 @@ router.beforeEach(async (routeTo, routeFrom, next) => {
   // eslint-disable-next-line no-unused-vars
   // eslint-disable-next-line no-inner-declarations
   function redirectToLogin() {
+    localStorage.removeItem("sm:token");
+    store.dispatch("auth/loggedOut");
+
     // Pass the original route to the login component
     next({
       name: "login",

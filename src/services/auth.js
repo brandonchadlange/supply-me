@@ -27,7 +27,6 @@ async function validate() {
   let valid = true;
 
   try {
-    console.log(axios.defaults.headers.common);
     const authResponse = await axios.get("/auth");
     valid = authResponse.data;
   } catch (err) {

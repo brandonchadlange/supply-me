@@ -1,6 +1,7 @@
 <script>
 import { required, email } from "vuelidate/lib/validators";
 import appConfig from "@/app.config";
+import UsersService from "../../../services/users";
 
 /**
  * Register component
@@ -18,7 +19,6 @@ export default {
   data() {
     return {
       user: {
-        username: "",
         email: "",
         password: "",
       },
@@ -30,9 +30,6 @@ export default {
   },
   validations: {
     user: {
-      username: {
-        required,
-      },
       email: {
         required,
         email,
@@ -42,64 +39,26 @@ export default {
       },
     },
   },
-  computed: {
-    notification() {
-      return this.$store ? this.$store.state.notification : null;
-    },
-    notificationAutoCloseDuration() {
-      return this.$store && this.$store.state.notification ? 5 : 0;
-    },
-  },
-  mounted() {
-    document.body.classList.add("authentication-bg");
-  },
   methods: {
     // Try to register the user in with the email, username
     // and password they provided.
-    tryToRegisterIn() {
+    async register() {
       this.submitted = true;
       // stop here if form is invalid
       this.$v.$touch();
 
-      if (this.$v.$invalid) {
+      if (this.$v.$invalid) return;
+
+      const { email, password } = this.user;
+
+      const registerResponse = await UsersService.register(email, password);
+
+      if (registerResponse.hasError) {
+        console.log(registerResponse.error);
         return;
-      } else {
-        if (process.env.VUE_APP_DEFAULT_AUTH === "firebase") {
-          this.tryingToRegister = true;
-          // Reset the regError if it existed.
-          this.regError = null;
-          return (
-            this.$store
-              .dispatch("auth/register", {
-                email: this.user.email,
-                password: this.user.password,
-              })
-              // eslint-disable-next-line no-unused-vars
-              .then((token) => {
-                this.tryingToRegister = false;
-                this.isRegisterError = false;
-                this.registerSuccess = true;
-                if (this.registerSuccess) {
-                  this.$router.push(
-                    this.$route.query.redirectFrom || {
-                      path: "/",
-                    }
-                  );
-                }
-              })
-              .catch((error) => {
-                this.tryingToRegister = false;
-                this.regError = error ? error : "";
-                this.isRegisterError = true;
-              })
-          );
-        } else if (process.env.VUE_APP_DEFAULT_AUTH === "fakebackend") {
-          const { email, username, password } = this.user;
-          if (email && username && password) {
-            this.$store.dispatch("authfack/registeruser", this.user);
-          }
-        }
       }
+
+      this.$router.push(`/verify-email?ref=${registerResponse.ref}`);
     },
   },
 };
@@ -114,26 +73,6 @@ export default {
     </div>
     <div class="account-pages my-5 pt-sm-5">
       <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="text-center">
-              <router-link to="/" class="mb-5 d-block auth-logo">
-                <img
-                  src="@/assets/images/logo-dark.png"
-                  alt
-                  height="22"
-                  class="logo logo-dark"
-                />
-                <img
-                  src="@/assets/images/logo-light.png"
-                  alt
-                  height="22"
-                  class="logo logo-light"
-                />
-              </router-link>
-            </div>
-          </div>
-        </div>
         <div class="row align-items-center justify-content-center">
           <div class="col-md-8 col-lg-6 col-xl-5">
             <div class="card">
@@ -143,37 +82,14 @@ export default {
                   <p class="text-muted">Get your free Minible account now.</p>
                 </div>
                 <div class="p-2 mt-4">
-                  <div
+                  <!-- <div
                     v-if="notification.message"
                     :class="'alert ' + notification.type"
                   >
                     {{ notification.message }}
-                  </div>
+                  </div> -->
 
-                  <b-form @submit.prevent="tryToRegisterIn">
-                    <b-form-group
-                      id="email-group"
-                      label="Username"
-                      class="mb-3"
-                      label-for="username"
-                    >
-                      <b-form-input
-                        id="username"
-                        v-model="user.username"
-                        type="text"
-                        placeholder="Enter username"
-                        :class="{
-                          'is-invalid': submitted && $v.user.username.$error,
-                        }"
-                      ></b-form-input>
-                      <div
-                        v-if="submitted && !$v.user.username.required"
-                        class="invalid-feedback"
-                      >
-                        Username is required.
-                      </div>
-                    </b-form-group>
-
+                  <b-form @submit.prevent="register">
                     <b-form-group
                       id="fullname-group"
                       label="Email"
@@ -246,43 +162,9 @@ export default {
                     </div>
 
                     <div class="mt-4 text-center">
-                      <div class="signin-other-title">
-                        <h5 class="font-size-14 mb-3 title">Sign up using</h5>
-                      </div>
-
-                      <ul class="list-inline">
-                        <li class="list-inline-item">
-                          <a
-                            href="javascript:void()"
-                            class="social-list-item bg-primary text-white border-primary"
-                          >
-                            <i class="mdi mdi-facebook"></i>
-                          </a>
-                        </li>
-                        <li class="list-inline-item">
-                          <a
-                            href="javascript:void()"
-                            class="social-list-item bg-info text-white border-info"
-                          >
-                            <i class="mdi mdi-twitter"></i>
-                          </a>
-                        </li>
-                        <li class="list-inline-item">
-                          <a
-                            href="javascript:void()"
-                            class="social-list-item bg-danger text-white border-danger"
-                          >
-                            <i class="mdi mdi-google"></i>
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="mt-4 text-center">
                       <p class="text-muted mb-0">
                         Already have an account ?
-                        <router-link
-                          to="/login"
-                          class="fw-medium text-primary"
+                        <router-link to="/login" class="fw-medium text-primary"
                           >Login</router-link
                         >
                       </p>
@@ -292,12 +174,6 @@ export default {
                 <!-- end card-body -->
               </div>
               <!-- end card -->
-            </div>
-            <div class="mt-5 text-center">
-              <p>
-                © {{ new Date().getFullYear() }} Minible. Crafted with
-                <i class="mdi mdi-heart text-danger"></i> by Themesbrand
-              </p>
             </div>
           </div>
           <!-- end col -->
