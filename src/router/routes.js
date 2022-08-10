@@ -7,7 +7,6 @@ export default [
     component: () => import("../views/pages/account/login"),
     meta: {
       beforeResolve(routeTo, routeFrom, next) {
-        console.log(store.getters["auth/loggedIn"]);
         // If the user is already logged in
         if (store.getters["auth/loggedIn"]) {
           // Redirect to the home page instead
@@ -84,6 +83,11 @@ export default [
         );
       },
     },
+  },
+  {
+    path: "/verify-email",
+    name: "verify-email",
+    component: () => import("../views/pages/account/verify-email"),
   },
   {
     path: "/",
