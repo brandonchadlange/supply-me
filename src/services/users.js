@@ -39,9 +39,28 @@ async function verifyEmail(ref, otp) {
   return retval;
 }
 
+async function fetchProfile() {
+  const retval = {
+    hasError: false,
+    error: "",
+    profile: null,
+  };
+
+  try {
+    const profileResponse = await axios.get(`/users/profile`);
+    retval.profile = profileResponse.data;
+  } catch (err) {
+    retval.hasError = true;
+    retval.error = err.response.data.message;
+  }
+
+  return retval;
+}
+
 const UsersService = {
   register,
   verifyEmail,
+  fetchProfile,
 };
 
 export default UsersService;

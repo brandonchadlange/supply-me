@@ -48,12 +48,22 @@ export default {
       }
 
       localStorage.setItem("sm:token", loginResponse.access_token);
+
       setJWTBearerToken(loginResponse.access_token);
+
       this.$store.dispatch("auth/loggedIn", {
         access_token: loginResponse.access_token,
       });
 
-      this.$router.push("/");
+      const { profile } = await this.$store.dispatch("user/fetchProfile");
+
+      if (!profile.onboardingComplete) {
+        this.$router.push("/onboarding");
+        return;
+      }
+
+      const { defaultProject } = profile;
+      this.$router.push("/" + defaultProject.slug);
     },
   },
 };

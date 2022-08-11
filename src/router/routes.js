@@ -67,20 +67,9 @@ export default [
         localStorage.removeItem("sm:token");
         store.dispatch("auth/loggedOut");
 
-        const authRequiredOnPreviousRoute = routeFrom.matched.some((route) =>
-          route.push("/login")
-        );
-
-        // Navigate back to previous page, or home as a fallback
-        next(
-          authRequiredOnPreviousRoute
-            ? {
-                name: "home",
-              }
-            : {
-                ...routeFrom,
-              }
-        );
+        next({
+          name: "login",
+        });
       },
     },
   },

@@ -35,7 +35,13 @@ router.beforeEach(async (routeTo, routeFrom, next) => {
 
   if (store.getters["auth/loggedIn"]) {
     const valid = await AuthService.validate();
-    return valid ? next() : redirectToLogin();
+
+    if (!valid) {
+      redirectToLogin();
+      return;
+    }
+
+    return next();
   }
 
   redirectToLogin();
