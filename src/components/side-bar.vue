@@ -11,6 +11,7 @@ export default {
   data() {
     return {
       menuItems: menuItems,
+      project: null,
     };
   },
   props: {
@@ -26,7 +27,7 @@ export default {
   components: {
     simplebar,
   },
-  mounted: function () {
+  mounted: function() {
     // eslint-disable-next-line no-unused-vars
     var menuRef = new MetisMenu("#side-menu");
     this._activateMenuDropdown();
@@ -34,6 +35,8 @@ export default {
     this.$router.afterEach(() => {
       this._activateMenuDropdown();
     });
+
+    this.project = this.$route.params.project;
   },
   watch: {
     type: {
@@ -253,7 +256,9 @@ export default {
                 <i :class="`${item.icon}`" v-if="item.icon"></i>
 
                 <span
-                  :class="`badge rounded-pill bg-${item.badge.variant} float-end`"
+                  :class="
+                    `badge rounded-pill bg-${item.badge.variant} float-end`
+                  "
                   v-if="item.badge"
                   >{{ $t(item.badge.text) }}</span
                 >
@@ -261,14 +266,16 @@ export default {
               </a>
 
               <router-link
-                :to="item.link"
+                :to="'/' + project + item.link"
                 v-if="!hasItems(item)"
                 class="side-nav-link-ref"
               >
                 <i :class="`${item.icon}`" v-if="item.icon"></i>
                 <span>{{ $t(item.label) }}</span>
                 <span
-                  :class="`badge rounded-pill bg-${item.badge.variant} float-end`"
+                  :class="
+                    `badge rounded-pill bg-${item.badge.variant} float-end`
+                  "
                   v-if="item.badge"
                   >{{ $t(item.badge.text) }}</span
                 >
@@ -277,7 +284,7 @@ export default {
               <ul v-if="hasItems(item)" class="sub-menu" aria-expanded="false">
                 <li v-for="(subitem, index) of item.subItems" :key="index">
                   <router-link
-                    :to="subitem.link"
+                    :to="'/' + project + subitem.link"
                     v-if="!hasItems(subitem)"
                     class="side-nav-link-ref"
                     >{{ $t(subitem.label) }}</router-link
