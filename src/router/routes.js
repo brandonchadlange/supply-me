@@ -90,7 +90,15 @@ export default [
     component: () => import("../views/pages/account/verify-email"),
   },
   {
-    path: "/",
+    path: "/onboarding",
+    name: "onboarding",
+    component: () => import("../views/pages/account/onboarding"),
+    meta: {
+      authRequired: true,
+    },
+  },
+  {
+    path: "/:project",
     name: "home",
     meta: {
       authRequired: true,
@@ -98,7 +106,7 @@ export default [
     component: () => import("../views/pages/dashboard/index"),
   },
   {
-    path: "/suppliers",
+    path: "/:project/suppliers",
     name: "suppliers",
     meta: {
       authRequired: true,
