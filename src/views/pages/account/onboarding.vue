@@ -119,10 +119,6 @@ export default {
   methods: {
     async verifyOtp() {
       this.submitted = true;
-
-      console.log(this.$v);
-
-      // stop here if form is invalid
       this.$v.$touch();
 
       if (this.$v.$invalid) return;
@@ -140,7 +136,7 @@ export default {
 
       alert("Onboarding complete.");
 
-      this.$router.push(`/${onboardingResponse.project.slug}`);
+      this.$router.push(`/${onboardingResponse.project}`);
     },
   },
   validations: {

@@ -11,6 +11,18 @@ export const menuItems = [
   },
   {
     id: 2,
+    label: "menuitems.orders.text",
+    icon: "uil-shopping-cart-alt",
+    link: "/orders",
+  },
+  {
+    id: 3,
+    label: "menuitems.quotes.text",
+    icon: "uil-invoice",
+    link: "/suppliers",
+  },
+  {
+    id: 4,
     label: "menuitems.supplier.text",
     icon: "uil-store-alt",
     link: "/suppliers",

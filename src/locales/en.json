@@ -62,6 +62,12 @@
     },
     "supplier": {
       "text": "Suppliers"
+    },
+    "quotes": {
+      "text": "Quotes"
+    },
+    "orders": {
+      "text": "Orders"
     }
   }
 }

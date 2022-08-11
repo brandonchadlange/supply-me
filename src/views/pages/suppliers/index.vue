@@ -1,5 +1,4 @@
 <script>
-import Layout from "../../layouts/main";
 import PageHeader from "@/components/page-header";
 import appConfig from "@/app.config";
 import { supplierComputed } from "../../../state/helpers";
@@ -17,7 +16,7 @@ export default {
       },
     ],
   },
-  components: { Layout, PageHeader },
+  components: { PageHeader },
   data() {
     return {
       title: "Suppliers List",
@@ -51,21 +50,13 @@ export default {
   },
   computed: {
     ...supplierComputed,
-    /**
-     * Total no. of records
-     */
   },
   mounted() {
-    // Set the initial number of items
     this.totalRows = this.items.length;
     this.$store.dispatch("supplier/fetch");
   },
   methods: {
-    /**
-     * Search the table data with search input
-     */
     onFiltered(filteredItems) {
-      // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
     },
@@ -75,35 +66,21 @@ export default {
 </script>
 
 <template>
-  <Layout>
+  <div>
     <PageHeader :title="title" :items="items" />
 
     <div class="row">
       <div class="col-md-8">
         <div class="float-start">
           <div class="form-inline mb-3">
-            <div
-              class="input-daterange input-group"
-              data-provide="datepicker"
-              data-date-format="dd M, yyyy"
-              data-date-autoclose="true"
-            >
-              <input
-                type="text"
-                class="form-control text-left"
-                placeholder="From"
-                name="From"
-              />
-              <input
-                type="text"
-                class="form-control text-left"
-                placeholder="To"
-                name="To"
-              />
-              <div class="input-group-append">
-                <button type="button" class="btn btn-primary">
-                  <i class="mdi mdi-filter-variant"></i>
-                </button>
+            <div class="search-box ms-2">
+              <div class="position-relative">
+                <input
+                  type="text"
+                  class="form-control rounded"
+                  placeholder="Search..."
+                />
+                <i class="mdi mdi-magnify search-icon"></i>
               </div>
             </div>
           </div>
@@ -111,9 +88,13 @@ export default {
       </div>
       <div class="col-md-4">
         <div class="float-end">
-          <button type="button" class="btn btn-success mb-3">
+          <router-link
+            :to="`/${$route.params.project}/suppliers/create`"
+            type="button"
+            class="btn btn-outline-primary mb-3"
+          >
             <i class="mdi mdi-plus me-1"></i> Add Supplier
-          </button>
+          </router-link>
         </div>
       </div>
     </div>
@@ -162,5 +143,5 @@ export default {
         </div>
       </div>
     </div>
-  </Layout>
+  </div>
 </template>

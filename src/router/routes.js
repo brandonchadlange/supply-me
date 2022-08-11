@@ -87,19 +87,37 @@ export default [
     },
   },
   {
-    path: "/:project",
-    name: "home",
+    path: "",
+    name: "project-detail",
     meta: {
       authRequired: true,
     },
-    component: () => import("../views/pages/dashboard/index"),
-  },
-  {
-    path: "/:project/suppliers",
-    name: "suppliers",
-    meta: {
-      authRequired: true,
-    },
-    component: () => import("../views/pages/suppliers/index"),
+    component: () => import("../views/pages/project/index"),
+    children: [
+      {
+        path: ":project",
+        name: "home",
+        meta: {
+          authRequired: true,
+        },
+        component: () => import("../views/pages/dashboard/index"),
+      },
+      {
+        path: ":project/suppliers",
+        name: "suppliers",
+        meta: {
+          authRequired: true,
+        },
+        component: () => import("../views/pages/suppliers/index"),
+      },
+      {
+        path: ":project/suppliers/create",
+        name: "suppliers-create",
+        meta: {
+          authRequired: true,
+        },
+        component: () => import("../views/pages/suppliers/create"),
+      },
+    ],
   },
 ];

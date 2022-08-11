@@ -1,8 +1,6 @@
 <script>
-import Layout from "../../layouts/main";
 import PageHeader from "@/components/page-header";
 import appConfig from "@/app.config";
-
 
 export default {
   page: {
@@ -15,7 +13,6 @@ export default {
     ],
   },
   components: {
-    Layout,
     PageHeader,
   },
   data() {
@@ -36,8 +33,7 @@ export default {
 </script>
 
 <template>
-  <Layout>
+  <div>
     <PageHeader :title="title" :items="items" />
-   
-  </Layout>
+  </div>
 </template>
