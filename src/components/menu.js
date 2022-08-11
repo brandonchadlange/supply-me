@@ -11,8 +11,8 @@ export const menuItems = [
   },
   {
     id: 2,
-    label: "menuitems.dashboard.text",
-    icon: "uil-home-alt",
+    label: "menuitems.supplier.text",
+    icon: "uil-store-alt",
     link: "/suppliers",
   },
 ];
