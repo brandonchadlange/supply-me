@@ -19,6 +19,8 @@ export default {
 
 <template>
   <Layout>
-    <router-view />
+    <main>
+      <router-view />
+    </main>
   </Layout>
 </template>

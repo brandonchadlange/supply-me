@@ -19,12 +19,18 @@ export const menuItems = [
     id: 3,
     label: "menuitems.quotes.text",
     icon: "uil-invoice",
-    link: "/suppliers",
+    link: "/quotes",
   },
   {
     id: 4,
-    label: "menuitems.supplier.text",
+    label: "menuitems.suppliers.text",
     icon: "uil-store-alt",
     link: "/suppliers",
+  },
+  {
+    id: 5,
+    label: "menuitems.products.text",
+    icon: "uil-box",
+    link: "/products",
   },
 ];

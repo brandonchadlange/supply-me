@@ -118,6 +118,54 @@ export default [
         },
         component: () => import("../views/pages/suppliers/create"),
       },
+      {
+        path: ":project/suppliers/:supplier",
+        name: "supplier-overview",
+        meta: {
+          authRequired: true,
+        },
+        component: () => import("../views/pages/suppliers/overview/index"),
+      },
+      {
+        path: ":project/orders",
+        name: "orders",
+        meta: {
+          authRequired: true,
+        },
+        component: () => import("../views/pages/orders/index"),
+      },
+      {
+        path: ":project/quotes",
+        name: "quotes",
+        meta: {
+          authRequired: true,
+        },
+        component: () => import("../views/pages/quotes/index"),
+      },
+      {
+        path: ":project/quotes/create",
+        name: "quotes-create",
+        meta: {
+          authRequired: true,
+        },
+        component: () => import("../views/pages/quotes/create"),
+      },
+      {
+        path: ":project/products",
+        name: "products",
+        meta: {
+          authRequired: true,
+        },
+        component: () => import("../views/pages/products/index"),
+      },
+      {
+        path: ":project/products/create",
+        name: "products-create",
+        meta: {
+          authRequired: true,
+        },
+        component: () => import("../views/pages/products/create"),
+      },
     ],
   },
 ];

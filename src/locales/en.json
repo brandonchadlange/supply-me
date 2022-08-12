@@ -60,7 +60,7 @@
       "text": "Dashboard",
       "badge": "01"
     },
-    "supplier": {
+    "suppliers": {
       "text": "Suppliers"
     },
     "quotes": {
@@ -68,6 +68,9 @@
     },
     "orders": {
       "text": "Orders"
+    },
+    "products": {
+      "text": "Products"
     }
   }
 }

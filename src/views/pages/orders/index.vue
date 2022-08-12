@@ -73,7 +73,7 @@ export default {
       <div class="col-md-8">
         <div class="float-start">
           <div class="form-inline mb-3">
-            <div class="search-box">
+            <div class="search-box ms-2">
               <div class="position-relative">
                 <input
                   type="text"

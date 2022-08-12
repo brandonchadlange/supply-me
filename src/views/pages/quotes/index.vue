@@ -89,11 +89,11 @@ export default {
       <div class="col-md-4">
         <div class="float-end">
           <router-link
-            :to="`/${$route.params.project}/suppliers/create`"
+            :to="`/${$route.params.project}/quotes/create`"
             type="button"
             class="btn btn-outline-primary mb-3"
           >
-            <i class="mdi mdi-plus me-1"></i> Add Supplier
+            <i class="mdi mdi-plus me-1"></i> Request Quote
           </router-link>
         </div>
       </div>

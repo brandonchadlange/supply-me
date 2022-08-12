@@ -41,7 +41,23 @@ router.beforeEach(async (routeTo, routeFrom, next) => {
       return;
     }
 
-    return next();
+    if (!store.getters["user/profileFetched"]) {
+      await store.dispatch("user/fetchProfile");
+    }
+
+    const profile = store.getters["user/profile"];
+
+    if (!profile.onboardingComplete) {
+      return next("/onboarding");
+    }
+
+    console.log(profile);
+
+    return next({
+      params: {
+        project: profile.defaultProject.slug,
+      },
+    });
   }
 
   redirectToLogin();

@@ -8,7 +8,7 @@ import { supplierComputed } from "../../../state/helpers";
  */
 export default {
   page: {
-    title: "Suppliers List",
+    title: "Products List",
     meta: [
       {
         name: "description",
@@ -19,10 +19,10 @@ export default {
   components: { PageHeader },
   data() {
     return {
-      title: "Suppliers List",
+      title: "Products List",
       items: [
         {
-          text: "Suppliers",
+          text: "Products",
           active: true,
         },
       ],
@@ -34,18 +34,6 @@ export default {
       filterOn: [],
       sortBy: "age",
       sortDesc: false,
-      fields: [
-        {
-          key: "name",
-          label: "Supplier Name",
-          sortable: true,
-        },
-        {
-          key: "websiteUrl",
-          label: "Website URL",
-          sortable: true,
-        },
-      ],
     };
   },
   computed: {
@@ -89,11 +77,11 @@ export default {
       <div class="col-md-4">
         <div class="float-end">
           <router-link
-            :to="`/${$route.params.project}/suppliers/create`"
+            :to="`/${$route.params.project}/products/create`"
             type="button"
             class="btn btn-outline-primary mb-3"
           >
-            <i class="mdi mdi-plus me-1"></i> Add Supplier
+            <i class="mdi mdi-plus me-1"></i> Add Product
           </router-link>
         </div>
       </div>
@@ -104,28 +92,22 @@ export default {
         <table class="table table-nowrap table-hover mb-0">
           <thead>
             <tr>
-              <th scope="col" style="width: 250px;">Supplier Name</th>
-              <th scope="col" style="width: 250px;">Website URL</th>
+              <th scope="col" style="width: 150px;">Barcode</th>
+              <!-- <th scope="col" style="width: 150px;">SKU</th> -->
+              <th scope="col" style="width: 250px;">Description</th>
               <th scope="col">Fullfill with</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="supplier in suppliers" :key="supplier.id">
+              <td>9780261103566</td>
+              <!-- <td>
+                KPD-001
+              </td> -->
               <td>
-                <router-link
-                  :to="`/${$route.params.project}/suppliers/${supplier.slug}`"
-                  >{{ supplier.name }}</router-link
-                >
+                Ball Bearings
               </td>
-              <td>
-                <a :href="supplier.websiteUrl" target="_blank">
-                  <i
-                    class="uil uil-external-link-alt"
-                    style="margin-right: 4px;"
-                  ></i>
-                  <span>{{ supplier.websiteUrl }}</span>
-                </a>
-              </td>
+              <td></td>
             </tr>
           </tbody>
         </table>
