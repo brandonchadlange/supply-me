@@ -1,11 +1,10 @@
 <script>
 import PageHeader from "@/components/page-header";
 import appConfig from "@/app.config";
-import { supplierComputed } from "../../../state/helpers";
+import CreateProductDialog from "./_components/create-product-dialog.vue";
+import { EventBus } from "../../../libs/eventbus";
+import { mapGetters } from "vuex";
 
-/**
- * Invoice-list component
- */
 export default {
   page: {
     title: "Products List",
@@ -16,7 +15,7 @@ export default {
       },
     ],
   },
-  components: { PageHeader },
+  components: { PageHeader, CreateProductDialog },
   data() {
     return {
       title: "Products List",
@@ -37,16 +36,18 @@ export default {
     };
   },
   computed: {
-    ...supplierComputed,
+    ...mapGetters({
+      products: "product/products",
+    }),
   },
   mounted() {
-    this.totalRows = this.items.length;
-    this.$store.dispatch("supplier/fetch");
+    this.$store.dispatch("product/fetch", {
+      product: 1,
+    });
   },
   methods: {
-    onFiltered(filteredItems) {
-      this.totalRows = filteredItems.length;
-      this.currentPage = 1;
+    openCreateProductDialog() {
+      EventBus.$emit("create-product-dialog:show");
     },
   },
   middleware: "authentication",
@@ -56,7 +57,6 @@ export default {
 <template>
   <div>
     <PageHeader :title="title" :items="items" />
-
     <div class="row">
       <div class="col-md-8">
         <div class="float-start">
@@ -76,13 +76,13 @@ export default {
       </div>
       <div class="col-md-4">
         <div class="float-end">
-          <router-link
-            :to="`/${$route.params.project}/products/create`"
+          <button
+            @click="openCreateProductDialog"
             type="button"
             class="btn btn-outline-primary mb-3"
           >
             <i class="mdi mdi-plus me-1"></i> Add Product
-          </router-link>
+          </button>
         </div>
       </div>
     </div>
@@ -99,13 +99,13 @@ export default {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="supplier in suppliers" :key="supplier.id">
-              <td>9780261103566</td>
+            <tr v-for="product in products" :key="product.id">
+              <td>{{ product.id }}</td>
               <!-- <td>
                 KPD-001
               </td> -->
               <td>
-                Ball Bearings
+                {{ product.description }}
               </td>
               <td></td>
             </tr>
@@ -113,5 +113,6 @@ export default {
         </table>
       </div>
     </div>
+    <CreateProductDialog />
   </div>
 </template>

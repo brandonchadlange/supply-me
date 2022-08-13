@@ -1,18 +1,14 @@
 <script>
 import PageHeader from "@/components/page-header";
 import appConfig from "@/app.config";
-import { required, url } from "vuelidate/lib/validators";
-import SupplierService from "../../../services/supplier";
-// import { FormWizard, TabContent } from "vue-form-wizard";
-import "vue-form-wizard/dist/vue-form-wizard.min.css";
-import { productData } from "./data-products";
-import { emailData } from "./data-inbox";
-import { supplierComputed } from "../../../state/helpers";
-import Multiselect from "vue-multiselect";
 
+/**
+ * Checkout component
+ */
 export default {
+  components: { PageHeader },
   page: {
-    title: "Add Supplier",
+    title: "Checkout",
     meta: [
       {
         name: "description",
@@ -20,95 +16,29 @@ export default {
       },
     ],
   },
-  components: {
-    PageHeader,
-    Multiselect,
-  },
-  computed: {
-    ...supplierComputed,
-  },
   data() {
     return {
-      emailData: emailData,
-      paginatedEmailData: emailData,
-      productData: productData,
-      title: "Create Supplier",
+      title: "Checkout",
       items: [
         {
-          text: "Suppliers",
+          text: "Ecommerce",
         },
         {
-          text: "Create",
+          text: "Checkout",
           active: true,
         },
       ],
-      form: {
-        name: "",
-        websiteUrl: "",
-      },
-      submitted: false,
-      value: null,
-      value1: null,
-      options: [
-        "Alaska",
-        "Hawaii",
-        "California",
-        "Nevada",
-        "Oregon",
-        "Washington",
-        "Arizona",
-        "Colorado",
-        "Idaho",
-        "Montana",
-        "Nebraska",
-        "New Mexico",
-        "North Dakota",
-        "Utah",
-        "Wyoming",
-        "Alabama",
-        "Arkansas",
-        "Illinois",
-        "Iowa",
-      ],
+      tag: "",
+      tags: [],
     };
   },
-  validations: {
-    form: {
-      name: {
-        required,
-      },
-      websiteUrl: {
-        required,
-        url,
-      },
+  methods: {
+    addTag() {
+      this.tags.push(this.tag);
+      this.tag = "";
     },
   },
   middleware: "authentication",
-  methods: {
-    async submit() {
-      this.submitted = true;
-      this.$v.$touch();
-
-      if (this.$v.$invalid) return;
-
-      await SupplierService.createSupplier(
-        this.form.name,
-        this.form.websiteUrl,
-        this.$route.params.project
-      );
-
-      this.$router.push(`/${this.$route.params.project}/suppliers`);
-    },
-    valuechange(value) {
-      this.productData = productData.filter(function(product) {
-        return product.newprice <= value.currentValue;
-      });
-    },
-  },
-  mounted() {
-    this.totalRows = this.items.length;
-    this.$store.dispatch("supplier/fetch");
-  },
 };
 </script>
 
@@ -116,268 +46,414 @@ export default {
   <div>
     <PageHeader :title="title" :items="items" />
     <div class="row">
-      <div class="col-lg-6">
-        <div class="card">
-          <div class="card-body">
-            <h4 class="card-title">Select2</h4>
-            <p class="card-title-desc">
-              A mobile and touch friendly input spinner component for Bootstrap
-            </p>
-            <div class="col-sm-8">
-              <label>Single Select</label>
-              <multiselect
-                v-model="value"
-                :options="options"
-                class="helo"
-              ></multiselect>
+      <div class="col-xl-8">
+        <div class="custom-accordion">
+          <div class="card">
+            <a
+              href="javascript: void(0);"
+              class="text-dark"
+              data-toggle="collapse"
+              v-b-toggle.checkout-billinginfo-collapse
+            >
+              <div class="p-4">
+                <div class="media align-items-center">
+                  <div class="me-3">
+                    <i class="uil uil-receipt text-primary h2"></i>
+                  </div>
+                  <div class="media-body overflow-hidden">
+                    <h5 class="font-size-16 mb-1">Billing Info</h5>
+                    <p class="text-muted text-truncate mb-0">
+                      Sed ut perspiciatis unde omnis iste
+                    </p>
+                  </div>
+                  <i
+                    class="mdi mdi-chevron-up accor-down-icon font-size-24"
+                  ></i>
+                </div>
+              </div>
+            </a>
 
-              <label class="mt-3">Multiple Select</label>
-              <multiselect
-                v-model="value1"
-                :options="options"
-                :multiple="true"
-              ></multiselect>
-            </div>
+            <b-collapse id="checkout-billinginfo-collapse" visible>
+              <div class="p-4 border-top">
+                <form>
+                  <div>
+                    <div class="row">
+                      <div class="col-lg-4">
+                        <div class="form-group mb-4">
+                          <label for="billing-name">Name</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="billing-name"
+                            placeholder="Enter name"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-lg-4">
+                        <div class="form-group mb-4">
+                          <label for="billing-email-address"
+                            >Email Address</label
+                          >
+                          <input
+                            type="email"
+                            class="form-control"
+                            id="billing-email-address"
+                            placeholder="Enter email"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-lg-4">
+                        <div class="form-group mb-4">
+                          <label for="billing-phone">Phone</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="billing-phone"
+                            placeholder="Enter Phone no."
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                      <label for="billing-address">Address</label>
+                      <textarea
+                        class="form-control"
+                        id="billing-address"
+                        rows="3"
+                        placeholder="Enter full address"
+                      ></textarea>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-4">
+                        <div class="form-group mb-4 mb-lg-0">
+                          <label>Country</label>
+                          <select
+                            class="form-control custom-select"
+                            title="Country"
+                          >
+                            <option value="0">Select Country</option>
+                            <option value="AF">Afghanistan</option>
+                            <option value="AL">Albania</option>
+                            <option value="DZ">Algeria</option>
+                            <option value="AS">American Samoa</option>
+                            <option value="AD">Andorra</option>
+                            <option value="AO">Angola</option>
+                            <option value="AI">Anguilla</option>
+                            <option value="AQ">Antarctica</option>
+                            <option value="AR">Argentina</option>
+                            <option value="AM">Armenia</option>
+                            <option value="AW">Aruba</option>
+                            <option value="AU">Australia</option>
+                            <option value="AT">Austria</option>
+                            <option value="AZ">Azerbaijan</option>
+                            <option value="BS">Bahamas</option>
+                            <option value="BH">Bahrain</option>
+                            <option value="BD">Bangladesh</option>
+                            <option value="BB">Barbados</option>
+                            <option value="BY">Belarus</option>
+                            <option value="BE">Belgium</option>
+                            <option value="BZ">Belize</option>
+                            <option value="BJ">Benin</option>
+                            <option value="BM">Bermuda</option>
+                            <option value="BT">Bhutan</option>
+                            <option value="BO">Bolivia</option>
+                            <option value="BW">Botswana</option>
+                            <option value="BV">Bouvet Island</option>
+                            <option value="BR">Brazil</option>
+                            <option value="BN">Brunei Darussalam</option>
+                            <option value="BG">Bulgaria</option>
+                            <option value="BF">Burkina Faso</option>
+                            <option value="BI">Burundi</option>
+                            <option value="KH">Cambodia</option>
+                            <option value="CM">Cameroon</option>
+                            <option value="CA">Canada</option>
+                            <option value="CV">Cape Verde</option>
+                            <option value="KY">Cayman Islands</option>
+                            <option value="CF">Central African Republic</option>
+                            <option value="TD">Chad</option>
+                            <option value="CL">Chile</option>
+                            <option value="CN">China</option>
+                            <option value="CX">Christmas Island</option>
+                            <option value="CC">Cocos (Keeling) Islands</option>
+                            <option value="CO">Colombia</option>
+                            <option value="KM">Comoros</option>
+                            <option value="CG">Congo</option>
+                            <option value="CK">Cook Islands</option>
+                            <option value="CR">Costa Rica</option>
+                            <option value="CI">Cote d'Ivoire</option>
+                            <option value="HR">Croatia (Hrvatska)</option>
+                            <option value="CU">Cuba</option>
+                            <option value="CY">Cyprus</option>
+                            <option value="CZ">Czech Republic</option>
+                            <option value="DK">Denmark</option>
+                            <option value="DJ">Djibouti</option>
+                            <option value="DM">Dominica</option>
+                            <option value="DO">Dominican Republic</option>
+                            <option value="EC">Ecuador</option>
+                            <option value="EG">Egypt</option>
+                            <option value="SV">El Salvador</option>
+                            <option value="GQ">Equatorial Guinea</option>
+                            <option value="ER">Eritrea</option>
+                            <option value="EE">Estonia</option>
+                            <option value="ET">Ethiopia</option>
+                            <option value="FK">
+                              Falkland Islands (Malvinas)
+                            </option>
+                            <option value="FO">Faroe Islands</option>
+                            <option value="FJ">Fiji</option>
+                            <option value="FI">Finland</option>
+                            <option value="FR">France</option>
+                            <option value="GF">French Guiana</option>
+                            <option value="PF">French Polynesia</option>
+                            <option value="GA">Gabon</option>
+                            <option value="GM">Gambia</option>
+                            <option value="GE">Georgia</option>
+                            <option value="DE">Germany</option>
+                            <option value="GH">Ghana</option>
+                            <option value="GI">Gibraltar</option>
+                            <option value="GR">Greece</option>
+                            <option value="GL">Greenland</option>
+                            <option value="GD">Grenada</option>
+                            <option value="GP">Guadeloupe</option>
+                            <option value="GU">Guam</option>
+                            <option value="GT">Guatemala</option>
+                            <option value="GN">Guinea</option>
+                            <option value="GW">Guinea-Bissau</option>
+                            <option value="GY">Guyana</option>
+                            <option value="HT">Haiti</option>
+                            <option value="HN">Honduras</option>
+                            <option value="HK">Hong Kong</option>
+                            <option value="HU">Hungary</option>
+                            <option value="IS">Iceland</option>
+                            <option value="IN">India</option>
+                            <option value="ID">Indonesia</option>
+                            <option value="IQ">Iraq</option>
+                            <option value="IE">Ireland</option>
+                            <option value="IL">Israel</option>
+                            <option value="IT">Italy</option>
+                            <option value="JM">Jamaica</option>
+                            <option value="JP">Japan</option>
+                            <option value="JO">Jordan</option>
+                            <option value="KZ">Kazakhstan</option>
+                            <option value="KE">Kenya</option>
+                            <option value="KI">Kiribati</option>
+                            <option value="KR">Korea, Republic of</option>
+                            <option value="KW">Kuwait</option>
+                            <option value="KG">Kyrgyzstan</option>
+                            <option value="LV">Latvia</option>
+                            <option value="LB">Lebanon</option>
+                            <option value="LS">Lesotho</option>
+                            <option value="LR">Liberia</option>
+                            <option value="LY">Libyan Arab Jamahiriya</option>
+                            <option value="LI">Liechtenstein</option>
+                            <option value="LT">Lithuania</option>
+                            <option value="LU">Luxembourg</option>
+                            <option value="MO">Macau</option>
+                            <option value="MG">Madagascar</option>
+                            <option value="MW">Malawi</option>
+                            <option value="MY">Malaysia</option>
+                            <option value="MV">Maldives</option>
+                            <option value="ML">Mali</option>
+                            <option value="MT">Malta</option>
+                            <option value="MH">Marshall Islands</option>
+                            <option value="MQ">Martinique</option>
+                            <option value="MR">Mauritania</option>
+                            <option value="MU">Mauritius</option>
+                            <option value="YT">Mayotte</option>
+                            <option value="MX">Mexico</option>
+                            <option value="MD">Moldova, Republic of</option>
+                            <option value="MC">Monaco</option>
+                            <option value="MN">Mongolia</option>
+                            <option value="MS">Montserrat</option>
+                            <option value="MA">Morocco</option>
+                            <option value="MZ">Mozambique</option>
+                            <option value="MM">Myanmar</option>
+                            <option value="NA">Namibia</option>
+                            <option value="NR">Nauru</option>
+                            <option value="NP">Nepal</option>
+                            <option value="NL">Netherlands</option>
+                            <option value="AN">Netherlands Antilles</option>
+                            <option value="NC">New Caledonia</option>
+                            <option value="NZ">New Zealand</option>
+                            <option value="NI">Nicaragua</option>
+                            <option value="NE">Niger</option>
+                            <option value="NG">Nigeria</option>
+                            <option value="NU">Niue</option>
+                            <option value="NF">Norfolk Island</option>
+                            <option value="MP">Northern Mariana Islands</option>
+                            <option value="NO">Norway</option>
+                            <option value="OM">Oman</option>
+                            <option value="PW">Palau</option>
+                            <option value="PA">Panama</option>
+                            <option value="PG">Papua New Guinea</option>
+                            <option value="PY">Paraguay</option>
+                            <option value="PE">Peru</option>
+                            <option value="PH">Philippines</option>
+                            <option value="PN">Pitcairn</option>
+                            <option value="PL">Poland</option>
+                            <option value="PT">Portugal</option>
+                            <option value="PR">Puerto Rico</option>
+                            <option value="QA">Qatar</option>
+                            <option value="RE">Reunion</option>
+                            <option value="RO">Romania</option>
+                            <option value="RU">Russian Federation</option>
+                            <option value="RW">Rwanda</option>
+                            <option value="KN">Saint Kitts and Nevis</option>
+                            <option value="LC">Saint LUCIA</option>
+                            <option value="WS">Samoa</option>
+                            <option value="SM">San Marino</option>
+                            <option value="ST">Sao Tome and Principe</option>
+                            <option value="SA">Saudi Arabia</option>
+                            <option value="SN">Senegal</option>
+                            <option value="SC">Seychelles</option>
+                            <option value="SL">Sierra Leone</option>
+                            <option value="SG">Singapore</option>
+                            <option value="SK">
+                              Slovakia (Slovak Republic)
+                            </option>
+                            <option value="SI">Slovenia</option>
+                            <option value="SB">Solomon Islands</option>
+                            <option value="SO">Somalia</option>
+                            <option value="ZA">South Africa</option>
+                            <option value="ES">Spain</option>
+                            <option value="LK">Sri Lanka</option>
+                            <option value="SH">St. Helena</option>
+                            <option value="PM">St. Pierre and Miquelon</option>
+                            <option value="SD">Sudan</option>
+                            <option value="SR">Suriname</option>
+                            <option value="SZ">Swaziland</option>
+                            <option value="SE">Sweden</option>
+                            <option value="CH">Switzerland</option>
+                            <option value="SY">Syrian Arab Republic</option>
+                            <option value="TW">
+                              Taiwan, Province of China
+                            </option>
+                            <option value="TJ">Tajikistan</option>
+                            <option value="TZ">
+                              Tanzania, United Republic of
+                            </option>
+                            <option value="TH">Thailand</option>
+                            <option value="TG">Togo</option>
+                            <option value="TK">Tokelau</option>
+                            <option value="TO">Tonga</option>
+                            <option value="TT">Trinidad and Tobago</option>
+                            <option value="TN">Tunisia</option>
+                            <option value="TR">Turkey</option>
+                            <option value="TM">Turkmenistan</option>
+                            <option value="TC">Turks and Caicos Islands</option>
+                            <option value="TV">Tuvalu</option>
+                            <option value="UG">Uganda</option>
+                            <option value="UA">Ukraine</option>
+                            <option value="AE">United Arab Emirates</option>
+                            <option value="GB">United Kingdom</option>
+                            <option value="US">United States</option>
+                            <option value="UY">Uruguay</option>
+                            <option value="UZ">Uzbekistan</option>
+                            <option value="VU">Vanuatu</option>
+                            <option value="VE">Venezuela</option>
+                            <option value="VN">Viet Nam</option>
+                            <option value="VG">Virgin Islands (British)</option>
+                            <option value="VI">Virgin Islands (U.S.)</option>
+                            <option value="WF">
+                              Wallis and Futuna Islands
+                            </option>
+                            <option value="EH">Western Sahara</option>
+                            <option value="YE">Yemen</option>
+                            <option value="ZM">Zambia</option>
+                            <option value="ZW">Zimbabwe</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-4">
+                        <div class="form-group mb-4 mb-lg-0">
+                          <label for="billing-city">City</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="billing-city"
+                            placeholder="Enter City"
+                          />
+                        </div>
+                      </div>
+
+                      <div class="col-lg-4">
+                        <div class="form-group mb-0">
+                          <label for="zip-code">Zip / Postal code</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="zip-code"
+                            placeholder="Enter Postal code"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </b-collapse>
           </div>
         </div>
       </div>
-      <div class="col-lg-6">
-        <div class="card">
+      <div class="col-xl-4">
+        <div class="card checkout-order-summary">
           <div class="card-body">
-            <h4 class="card-title">Css Switch</h4>
-            <p class="card-title-desc">Here are a few types of switches.</p>
-
-            <switches
-              v-model="enabled"
-              type-bold="true"
-              class="mb-0"
-            ></switches>
-            <switches
-              v-model="enabled1"
-              type-bold="false"
-              color="warning"
-              class="ms-1 mb-0"
-            ></switches>
-            <switches
-              v-model="enabled2"
-              type-bold="false"
-              color="danger"
-              class="ms-1 mb-0"
-            ></switches>
-            <switches
-              v-model="enabled3"
-              type-bold="false"
-              color="primary"
-              class="ms-1 mb-0"
-            ></switches>
-            <switches
-              v-model="enabled4"
-              type-bold="false"
-              color="success"
-              class="ms-1 mb-0"
-            ></switches>
-            <switches
-              v-model="enabled5"
-              type-bold="false"
-              color="info"
-              class="ms-1 mb-0"
-            ></switches>
-            <h5 class="mt-4 font-size-14 mb-4">Small switch</h5>
-
-            <div>
-              <switches v-model="small"></switches>
-              <switches
-                v-model="small1"
-                color="warning"
-                class="ms-1"
-              ></switches>
-              <switches v-model="small2" color="danger" class="ms-1"></switches>
-              <switches
-                v-model="small3"
-                color="success"
-                class="ms-1"
-              ></switches>
+            <div class="p-3 bg-light">
+              <h5 class="font-size-16 mb-0">
+                Product Attributes
+              </h5>
             </div>
+            <div class="table-responsive">
+              <table class="table table-sm table-nowrap mb-0">
+                <tbody>
+                  <tr>
+                    <th scope="row">Color</th>
+                    <td>3 options</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Brand</th>
+                    <td>2 options</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Price Range</th>
+                    <td>3 options</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Quality</th>
+                    <td>5 options</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="card checkout-order-summary">
+          <div class="card-body">
+            <div class="p-3 bg-light mb-2">
+              <h5 class="font-size-16 mb-0">
+                Product Tags
+              </h5>
+            </div>
+            <b-form @submit.prevent="addTag">
+              <input
+                v-model="tag"
+                id="default-input"
+                type="text"
+                class="form-control mb-2"
+              />
+            </b-form>
+            <span
+              v-for="(tag, key) in tags"
+              :key="key"
+              class="badge bg-primary font-size-14 me-1"
+              >{{ tag }}</span
+            >
           </div>
         </div>
       </div>
     </div>
-    <!-- <form-wizard color="#5b73e8">
-      <tab-content icon="mdi mdi-account-circle" class="px-0 p-0">
-        <b-tabs content-class="p-3 bg-white">
-          <b-tab active class="border-0">
-            <template v-slot:title>
-              <span class="d-inline-block d-sm-none">
-                <i class="fas fa-home"></i>
-              </span>
-              <span class="d-none d-sm-inline-block">All products</span>
-            </template>
-            <div class="table-responsive mb-0">
-              <div class="table-responsive">
-                <table class="table table-nowrap table-hover mb-0">
-                  <thead>
-                    <tr>
-                      <th scope="col" style="width: 250px;">
-                        Supplier Name
-                      </th>
-                      <th scope="col" style="width: 250px;">Website URL</th>
-                      <th scope="col"></th>
-                      <th scope="col" style="width: 50px;"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="supplier in suppliers" :key="supplier.id">
-                      <td>
-                        <router-link
-                          :to="
-                            `/${$route.params.project}/suppliers/${supplier.slug}`
-                          "
-                          >{{ supplier.name }}</router-link
-                        >
-                      </td>
-                      <td>
-                        <a :href="supplier.websiteUrl" target="_blank">
-                          <i
-                            class="uil uil-external-link-alt"
-                            style="margin-right: 4px;"
-                          ></i>
-                          <span>{{ supplier.websiteUrl }}</span>
-                        </a>
-                      </td>
-                      <td></td>
-                      <td>
-                        <button class="btn btn-sm btn btn-outline-primary">
-                          <i class="uil uil-plus"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </b-tab>
-          <b-tab class="border-0">
-            <template v-slot:title>
-              <span class="d-inline-block d-sm-none">
-                <i class="fas fa-home"></i>
-              </span>
-              <span class="d-none d-sm-inline-block">Selected</span>
-            </template>
-            <div class="table-responsive mb-0">
-              <div class="table-responsive">
-                <table class="table table-sm table-nowrap table-hover mb-0">
-                  <thead>
-                    <tr>
-                      <th scope="col" style="width: 250px;">
-                        Supplier Name
-                      </th>
-                      <th scope="col" style="width: 250px;">Website URL</th>
-                      <th scope="col">Fullfill with</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="supplier in suppliers" :key="supplier.id">
-                      <td>
-                        <router-link
-                          :to="
-                            `/${$route.params.project}/suppliers/${supplier.slug}`
-                          "
-                          >{{ supplier.name }}</router-link
-                        >
-                      </td>
-                      <td>
-                        <a :href="supplier.websiteUrl" target="_blank">
-                          <i
-                            class="uil uil-external-link-alt"
-                            style="margin-right: 4px;"
-                          ></i>
-                          <span>{{ supplier.websiteUrl }}</span>
-                        </a>
-                      </td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </b-tab>
-        </b-tabs>
-      </tab-content>
-      <tab-content icon="mdi mdi-face-profile">
-        <div class="row">
-          <div class="col-12">
-            <div class="form-group row mb-3">
-              <label class="col-md-3 col-form-label" for="name"
-                >First name</label
-              >
-              <div class="col-md-9">
-                <input
-                  type="text"
-                  name="name"
-                  class="form-control"
-                  value="Francis"
-                />
-              </div>
-            </div>
-            <div class="form-group row mb-3">
-              <label class="col-md-3 col-form-label" for="surname"
-                >Last name</label
-              >
-              <div class="col-md-9">
-                <input
-                  type="text"
-                  name="surname"
-                  class="form-control"
-                  value="Brinkman"
-                />
-              </div>
-            </div>
-
-            <div class="form-group row mb-3">
-              <label class="col-md-3 col-form-label" for="email">Email</label>
-              <div class="col-md-9">
-                <input
-                  type="email"
-                  name="email"
-                  class="form-control"
-                  value="cory1979@hotmail.com"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </tab-content>
-      <tab-content icon="mdi mdi-checkbox-marked-circle-outline">
-        <div class="row">
-          <div class="col-12">
-            <div class="text-center">
-              <h2 class="mt-0">
-                <i class="mdi mdi-check-all"></i>
-              </h2>
-              <h3 class="mt-0">Thank you !</h3>
-
-              <p class="w-75 mb-2 mx-auto">
-                Quisque nec turpis at urna dictum luctus. Suspendisse convallis
-                dignissim eros at volutpat. In egestas mattis dui. Aliquam
-                mattis dictum aliquet.
-              </p>
-
-              <div class="mb-3">
-                <div class="custom-control custom-checkbox">
-                  <input
-                    id="customCheck1"
-                    type="checkbox"
-                    class="custom-control-input"
-                  />
-                  <label class="custom-control-label" for="customCheck1"
-                    >I agree with the Terms and Conditions</label
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </tab-content>
-    </form-wizard> -->
   </div>
 </template>

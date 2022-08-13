@@ -16,3 +16,39 @@ export function initialiseHTTP() {
 export function setJWTBearerToken(access_token) {
   axios.defaults.headers.common["Authorization"] = "Bearer " + access_token;
 }
+
+export function getFetch(url) {
+  return async function fetch() {
+    const retval = {
+      success: true,
+      data: null,
+    };
+
+    try {
+      const response = await axios.get(url);
+      retval.data = response.data;
+    } catch (err) {
+      retval.success = false;
+    }
+
+    return retval;
+  };
+}
+
+export function getPost(url, request = {}) {
+  return async function post() {
+    const retval = {
+      success: true,
+      data: null,
+    };
+
+    try {
+      const response = await axios.post(url, request);
+      retval.data = response.data;
+    } catch (err) {
+      retval.success = false;
+    }
+
+    return retval;
+  };
+}

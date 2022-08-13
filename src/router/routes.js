@@ -164,7 +164,7 @@ export default [
         meta: {
           authRequired: true,
         },
-        component: () => import("../views/pages/products/create"),
+        component: () => import("../views/pages/products/create/index"),
       },
     ],
   },
