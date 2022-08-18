@@ -28,12 +28,12 @@ export const actions = {
   async logIn({ commit }, { email, password }) {
     const loginResponse = await AuthService.login(email, password);
 
-    if (loginResponse.hasError) {
+    if (!loginResponse.success) {
       commit("SET_ERROR", loginResponse.error);
       return;
     }
 
-    commit("SET_ACCESS_TOKEN", loginResponse.access_token);
+    commit("SET_ACCESS_TOKEN", loginResponse.data.access_token);
     EventBus.$emit("auth:loggedIn");
   },
   loggedIn({ commit }, { access_token }) {

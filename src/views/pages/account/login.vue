@@ -44,6 +44,12 @@ export default {
     },
     async onLogin() {
       const profile = await this.$store.dispatch("user/fetchProfile");
+
+      if (!profile.onboardingComplete) {
+        this.$router.push("/onboarding");
+        return;
+      }
+
       this.$router.push("/" + profile.defaultProject.slug);
     },
   },

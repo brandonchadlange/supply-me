@@ -5,91 +5,55 @@
     size="lg"
     title="Variant Details"
     title-class="font-18"
+    @ok="addVariants"
   >
-    <Row>
-      <Column cols="8">
-        <div class="form-group">
-          <label for="default-input">Description</label>
-          <input id="default-input" type="text" class="form-control" />
-        </div>
-      </Column>
-      <Column cols="4">
-        <div class="form-group">
-          <label for="default-input">Price</label>
-          <input id="default-input" type="text" class="form-control" />
-        </div>
-      </Column>
-    </Row>
-    <Row class="mt-4">
-      <Column>
-        <div class="form-group">
-          <label for="default-input">Url</label>
-          <input id="default-input" type="text" class="form-control" />
-        </div>
-      </Column>
-    </Row>
-    <Row class="mt-4">
-      <Column cols="8">
-        <div class="table-responsive">
-          <table class="mt-2 w-100">
-            <thead>
-              <tr>
-                <th style="width: 150px;">Attribute</th>
-                <th style="width: 300px;">Value</th>
-                <th style="width: 30px;"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  Color
-                </td>
-                <td>
-                  <select class="form-select form-select-sm">
-                    <option>Black</option>
-                    <option>Quarts</option>
-                  </select>
-                </td>
-                <td>
-                  <button class="btn btn-sm btn-outline-danger">
-                    <i class="uil uil-trash-alt"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Bluetooth
-                </td>
-                <td>
-                  <select class="form-select form-select-sm"
-                    ><option>Select</option>
-                    <option>True</option>
-                    <option>False</option>
-                  </select>
-                </td>
-                <td>
-                  <button class="btn btn-sm btn-outline-danger">
-                    <i class="uil uil-trash-alt"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </Column>
-    </Row>
+    <a href="#" @click.prevent="addVariant">Add variant</a>
+    <table class="table table-bordered table-sm mb-0 mt-2">
+      <thead class="table-light">
+        <tr>
+          <th style="width: 300px;">Name</th>
+          <th width="*">Values</th>
+          <th style="width: 50px"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(variant, key) in variants" :key="key">
+          <td>
+            <input
+              v-model="variant.name"
+              id="default-input"
+              type="text"
+              class="form-control mb-2"
+              placeholder="e.g color, size"
+            />
+          </td>
+          <td>
+            <input
+              v-model="variant.values"
+              id="default-input"
+              type="text"
+              class="form-control mb-2"
+            />
+          </td>
+          <td>
+            <button class="btn btn-outline-light" @click="deleteVariant(key)">
+              <i class="uil uil-trash-alt"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </b-modal>
 </template>
 
 <script>
 import { EventBus } from "@/libs/eventbus.js";
-import Row from "@/components/layout/row.vue";
-import Column from "@/components/layout/column.vue";
 
 export default {
-  components: {
-    Row,
-    Column,
+  data() {
+    return {
+      variants: [],
+    };
   },
   mounted() {
     EventBus.$on("variant-dialog:show", this.showDialog.bind(this));
@@ -97,6 +61,19 @@ export default {
   methods: {
     showDialog() {
       this.$bvModal.show("variant-dialog");
+    },
+    addVariant() {
+      this.variants.push({
+        name: "",
+        values: "",
+      });
+    },
+    deleteVariant(idx) {
+      this.variants.splice(idx, 1);
+    },
+    addVariants() {
+      EventBus.$emit("variants:updated", this.variants);
+      this.$bvModal.hide("variant-dialog");
     },
   },
 };

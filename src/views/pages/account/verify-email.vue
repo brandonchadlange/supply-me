@@ -71,8 +71,6 @@ export default {
     async verifyOtp() {
       this.submitted = true;
 
-      console.log(this.$v);
-
       // stop here if form is invalid
       this.$v.$touch();
 
@@ -83,8 +81,8 @@ export default {
 
       const verifyOtpResponse = await UsersService.verifyEmail(ref, otp);
 
-      if (verifyOtpResponse.hasError) {
-        alert(verifyOtpResponse.error);
+      if (!verifyOtpResponse.success) {
+        alert("There was an error");
         return;
       }
 

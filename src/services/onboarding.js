@@ -1,27 +1,16 @@
-import axios from "axios";
+import { getPost } from '../libs/http';
 
 async function completeOnboarding(firstName, lastName, companyName) {
-  let retval = {
-    hasError: false,
-    error: null,
-    project: null,
-  };
+  const url = "/users/onboarding"
 
-  const body = {
+  const request = {
     firstName,
     lastName,
     companyName,
   };
 
-  try {
-    const response = await axios.post("/onboarding", body);
-    retval.project = response.data;
-  } catch (err) {
-    retval.hasError = true;
-    retval.error = err.response.message;
-  }
-
-  return retval;
+  const post = getPost(url, request);
+  return await post();
 }
 
 const OnboardingService = {

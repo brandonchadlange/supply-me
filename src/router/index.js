@@ -1,9 +1,9 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import AuthService from "../services/auth";
+// import AuthService from "../services/auth";
 
 import VueMeta from "vue-meta";
-import store from "@/state/store";
+// import store from "@/state/store";
 
 import routes from "./routes";
 
@@ -29,53 +29,64 @@ const router = new VueRouter({
 
 // Before each route evaluates...
 router.beforeEach(async (routeTo, routeFrom, next) => {
-  const authRequired = routeTo.matched.some((route) => route.meta.authRequired);
+  // const authRequired = routeTo.matched.some((route) => route.meta.authRequired);
 
-  if (!authRequired) return next();
+  return next();
 
-  if (store.getters["auth/loggedIn"]) {
-    const valid = await AuthService.validate();
+  // if (!authRequired) return next();
 
-    if (!valid) {
-      redirectToLogin();
-      return;
-    }
+  // if (store.getters["auth/loggedIn"]) {
+  //   return next();
+  // }
 
-    if (!store.getters["user/profileFetched"]) {
-      await store.dispatch("user/fetchProfile");
-    }
+  // const valid = await AuthService.validate();
 
-    const profile = store.getters["user/profile"];
+  // if (valid.data) {
+  //   return next();
+  // }
 
-    if (!profile.onboardingComplete) {
-      return next("/onboarding");
-    }
+  // redirectToLogin();
 
-    console.log(profile);
+  // if (store.getters["auth/loggedIn"]) {
+  //   const valid = await AuthService.validate();
 
-    return next({
-      params: {
-        project: profile.defaultProject.slug,
-      },
-    });
-  }
+  //   if (!valid.data) {
+  //     redirectToLogin();
+  //     return;
+  //   }
 
-  redirectToLogin();
+  //   if (!store.getters["user/profileFetched"]) {
+  //     await store.dispatch("user/fetchProfile");
+  //   }
+
+  //   const profile = store.getters["user/profile"];
+
+  //   if (!profile.onboardingComplete) {
+  //     next("/onboarding");
+  //     return;
+  //   }
+
+  //   return next({
+  //     params: {
+  //       project: profile.defaultProject.slug,
+  //     },
+  //   });
+  // }
 
   // eslint-disable-next-line no-unused-vars
   // eslint-disable-next-line no-inner-declarations
-  function redirectToLogin() {
-    localStorage.removeItem("sm:token");
-    store.dispatch("auth/loggedOut");
+  // function redirectToLogin() {
+  //   localStorage.removeItem("sm:token");
+  //   store.dispatch("auth/loggedOut");
 
-    // Pass the original route to the login component
-    next({
-      name: "login",
-      query: {
-        redirectFrom: routeTo.fullPath,
-      },
-    });
-  }
+  //   // Pass the original route to the login component
+  //   next({
+  //     name: "login",
+  //     query: {
+  //       redirectFrom: routeTo.fullPath,
+  //     },
+  //   });
+  // }
 });
 
 router.beforeResolve(async (routeTo, routeFrom, next) => {

@@ -129,14 +129,14 @@ export default {
         this.form.companyName
       );
 
-      if (onboardingResponse.hasError) {
-        alert(onboardingResponse.error);
+      if (!onboardingResponse.success) {
+        alert("Onboarding Error");
         return;
       }
 
       alert("Onboarding complete.");
 
-      this.$router.push(`/${onboardingResponse.project}`);
+      this.$router.push(`/${onboardingResponse.data.slug}`);
     },
   },
   validations: {

@@ -1,39 +1,21 @@
-import axios from "axios";
+import { getFetch, getPost } from "../libs/http";
 
 async function login(username, password) {
-  const retval = {
-    hasError: false,
-    error: "",
-    access_token: null,
+  const url = "/auth/login";
+
+  const request = {
+    username,
+    password,
   };
 
-  try {
-    const body = {
-      username,
-      password,
-    };
-
-    const loginResponse = await axios.post("/auth/login", body);
-    retval.access_token = loginResponse.data.access_token;
-  } catch (err) {
-    retval.hasError = true;
-    retval.error = err.response.data.message;
-  }
-
-  return retval;
+  const post = getPost(url, request);
+  return await post();
 }
 
 async function validate() {
-  let valid = true;
-
-  try {
-    const authResponse = await axios.get("/auth");
-    valid = authResponse.data;
-  } catch (err) {
-    valid = false;
-  }
-
-  return valid;
+  const url = "/auth";
+  const fetch = getFetch(url);
+  return await fetch();
 }
 
 const AuhtService = {

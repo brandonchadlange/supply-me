@@ -8,10 +8,13 @@ export const mutations = {
   SET_SUPPLIERS(state, suppliers) {
     state.suppliers = suppliers;
   },
+  ADD_SUPPLIER(state, supplier) {
+    state.suppliers.push(supplier);
+  },
 };
 
 export const getters = {
-  suppliers(state) {
+  list(state) {
     return state.suppliers;
   },
 };
@@ -19,6 +22,11 @@ export const getters = {
 export const actions = {
   async fetch({ commit }) {
     const supplierResponse = await SupplierService.fetchSuppliers();
-    commit("SET_SUPPLIERS", supplierResponse.suppliers);
+    commit("SET_SUPPLIERS", supplierResponse.data);
+  },
+  async create({ commit }, { name }) {
+    const response = await SupplierService.createSupplier(name);
+    commit("ADD_SUPPLIER", response.data);
+    return response.data;
   },
 };

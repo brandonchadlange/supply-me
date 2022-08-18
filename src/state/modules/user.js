@@ -22,7 +22,7 @@ export const getters = {
 export const actions = {
   async fetchProfile({ commit }) {
     const profileResponse = await UsersService.fetchProfile();
-    commit("SET_PROFILE", profileResponse.profile);
-    return profileResponse.profile;
+    commit("SET_PROFILE", profileResponse.data);
+    return profileResponse.data;
   },
 };

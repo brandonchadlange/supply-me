@@ -1,60 +1,27 @@
-import axios from "axios";
+import { getFetch, getPost } from "../libs/http";
 
 async function register(username, password) {
-  const retval = {
-    hasError: false,
-    error: "",
-    ref: null,
+  const url = "/users/register";
+
+  const request = {
+    username,
+    password,
   };
 
-  try {
-    const body = {
-      username,
-      password,
-    };
-
-    const reposterResponse = await axios.post("/users/register", body);
-    retval.ref = reposterResponse.data.guid;
-  } catch (err) {
-    retval.hasError = true;
-    retval.error = err.response.data.message;
-  }
-
-  return retval;
+  const post = getPost(url, request);
+  return await post();
 }
 
 async function verifyEmail(ref, otp) {
-  const retval = {
-    hasError: false,
-    error: "",
-  };
-
-  try {
-    await axios.get(`/users/email-confirmation?ref=${ref}&otp=${otp}`);
-  } catch (err) {
-    retval.hasError = true;
-    retval.error = err.response.data.message;
-  }
-
-  return retval;
+  const url = `/users/email-confirmation?ref=${ref}&otp=${otp}`;
+  const fetch = getFetch(url);
+  return await fetch();
 }
 
 async function fetchProfile() {
-  const retval = {
-    hasError: false,
-    error: "",
-    profile: null,
-  };
-
-  try {
-    const profileResponse = await axios.get(`/users/profile`);
-    retval.profile = profileResponse.data;
-  } catch (err) {
-    retval.hasError = true;
-    retval.error = err.response.data.message;
-  }
-
-  return retval;
+  const url = "/users/profile";
+  const fetch = getFetch(url);
+  return await fetch();
 }
 
 const UsersService = {

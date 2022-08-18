@@ -53,12 +53,11 @@ export default {
 
       const registerResponse = await UsersService.register(email, password);
 
-      if (registerResponse.hasError) {
-        console.log(registerResponse.error);
+      if (!registerResponse.success) {
         return;
       }
 
-      this.$router.push(`/verify-email?ref=${registerResponse.ref}`);
+      this.$router.push(`/verify-email?ref=${registerResponse.data.guid}`);
     },
   },
 };

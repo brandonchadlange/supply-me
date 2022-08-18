@@ -37,7 +37,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      products: "product/products",
+      products: "product/list",
     }),
   },
   mounted() {

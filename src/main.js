@@ -28,27 +28,6 @@ Vue.use(VueGoogleMaps, {
   installComponents: true,
 });
 
-import { initFirebaseBackend } from "./helpers/firebase/authUtils";
-
-import { configureFakeBackend } from "./helpers/fakebackend/fake-backend";
-
-const firebaseConfig = {
-  apiKey: process.env.VUE_APP_APIKEY,
-  authDomain: process.env.VUE_APP_AUTHDOMAIN,
-  databaseURL: process.env.VUE_APP_VUE_APP_DATABASEURL,
-  projectId: process.env.VUE_APP_PROJECTId,
-  storageBucket: process.env.VUE_APP_STORAGEBUCKET,
-  messagingSenderId: process.env.VUE_APP_MESSAGINGSENDERID,
-  appId: process.env.VUE_APP_APPId,
-  measurementId: process.env.VUE_APP_MEASUREMENTID,
-};
-
-if (process.env.VUE_APP_DEFAULT_AUTH === "firebase") {
-  initFirebaseBackend(firebaseConfig);
-} else if (process.env.VUE_APP_DEFAULT_AUTH === "fakebackend") {
-  configureFakeBackend();
-}
-
 initialiseHTTP(router);
 
 import "@/assets/scss/app.scss";

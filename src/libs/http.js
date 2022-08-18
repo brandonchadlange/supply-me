@@ -18,7 +18,7 @@ export function setJWTBearerToken(access_token) {
 }
 
 export function getFetch(url) {
-  return async function fetch() {
+  return async () => {
     const retval = {
       success: true,
       data: null,
@@ -36,7 +36,7 @@ export function getFetch(url) {
 }
 
 export function getPost(url, request = {}) {
-  return async function post() {
+  return async () => {
     const retval = {
       success: true,
       data: null,
@@ -44,6 +44,24 @@ export function getPost(url, request = {}) {
 
     try {
       const response = await axios.post(url, request);
+      retval.data = response.data;
+    } catch (err) {
+      retval.success = false;
+    }
+
+    return retval;
+  };
+}
+
+export function getDelete(url) {
+  return async () => {
+    const retval = {
+      success: true,
+      data: null,
+    };
+
+    try {
+      const response = await axios.delete(url);
       retval.data = response.data;
     } catch (err) {
       retval.success = false;

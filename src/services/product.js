@@ -1,13 +1,13 @@
-import { getFetch, getPost } from "../libs/http";
+import { getFetch, getPost, getDelete } from "../libs/http";
 
-async function fetchProducts(project = 1) {
-  const url = "/products?project=" + project;
+async function fetchProducts() {
+  const url = "/products";
   const fetch = getFetch(url);
   return await fetch();
 }
 
-async function createProject(project = 1, description) {
-  const url = "/products?project=" + project;
+async function createProduct(description) {
+  const url = "/products";
 
   const request = {
     description,
@@ -17,9 +17,23 @@ async function createProject(project = 1, description) {
   return await post();
 }
 
+async function createProductVariantSupplier(productVariantId, supplierId) {
+  const url = `/products/variant/supplier?variant=${productVariantId}&supplier=${supplierId}`;
+  const post = getPost(url);
+  return await post();
+}
+
+async function deleteProductVariantSupplier(supplierVariantId) {
+  const url = `/products/variant/supplier?supplier_variant=${supplierVariantId}`;
+  const remove = getDelete(url);
+  return await remove();
+}
+
 const ProductsService = {
   fetchProducts,
-  createProject,
+  createProduct,
+  createProductVariantSupplier,
+  deleteProductVariantSupplier,
 };
 
 export default ProductsService;
