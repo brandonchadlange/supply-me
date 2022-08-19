@@ -7,8 +7,8 @@ export default {
       email,
     },
     messages: {
-      required: "views.login.form.email.validation.required",
-      email: "views.login.form.email.validation.email",
+      required: "Email is required.",
+      email: "Please enter valid email.",
     },
   },
   password: {
@@ -16,7 +16,7 @@ export default {
       required,
     },
     messages: {
-      required: "views.login.form.password.validation.required",
+      required: "Password is required.",
     },
   },
 };

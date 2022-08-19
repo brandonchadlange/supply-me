@@ -24,9 +24,12 @@ export const actions = {
     const supplierResponse = await SupplierService.fetchSuppliers();
     commit("SET_SUPPLIERS", supplierResponse.data);
   },
-  async create({ commit }, { name }) {
-    const response = await SupplierService.createSupplier(name);
+  async create({ commit }, supplier) {
+    const response = await SupplierService.createSupplier(supplier);
     commit("ADD_SUPPLIER", response.data);
     return response.data;
+  },
+  update() {
+    // const response = await SupplierService.createSupplier(supplier);
   },
 };

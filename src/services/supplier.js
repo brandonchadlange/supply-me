@@ -6,12 +6,10 @@ async function fetchSuppliers() {
   return await fetch();
 }
 
-async function createSupplier(name) {
+async function createSupplier(supplier) {
   const url = `/suppliers`;
 
-  const request = {
-    name,
-  };
+  const request = supplier;
 
   const post = getPost(url, request);
   return await post();

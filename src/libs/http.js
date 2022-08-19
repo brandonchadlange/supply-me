@@ -17,11 +17,18 @@ export function setJWTBearerToken(access_token) {
   axios.defaults.headers.common["Authorization"] = "Bearer " + access_token;
 }
 
+export function setProjectIdHeader(projectId) {
+  axios.defaults.headers.common["x-projectid"] = projectId;
+}
+
 export function getFetch(url) {
   return async () => {
     const retval = {
       success: true,
       data: null,
+      error: {
+        message: null,
+      },
     };
 
     try {
@@ -29,6 +36,7 @@ export function getFetch(url) {
       retval.data = response.data;
     } catch (err) {
       retval.success = false;
+      retval.error.message = err.response.data.message;
     }
 
     return retval;
@@ -40,6 +48,9 @@ export function getPost(url, request = {}) {
     const retval = {
       success: true,
       data: null,
+      error: {
+        message: null,
+      },
     };
 
     try {
@@ -47,6 +58,7 @@ export function getPost(url, request = {}) {
       retval.data = response.data;
     } catch (err) {
       retval.success = false;
+      retval.error.message = err.response.data.message;
     }
 
     return retval;
@@ -58,6 +70,9 @@ export function getDelete(url) {
     const retval = {
       success: true,
       data: null,
+      error: {
+        message: null,
+      },
     };
 
     try {
@@ -65,6 +80,7 @@ export function getDelete(url) {
       retval.data = response.data;
     } catch (err) {
       retval.success = false;
+      retval.error.message = err.response.data.message;
     }
 
     return retval;

@@ -1,4 +1,4 @@
-import { required, email } from "vuelidate/lib/validators";
+import { required, email, url } from "vuelidate/lib/validators";
 
 export default {
   name: {
@@ -7,6 +7,14 @@ export default {
     },
     messages: {
       required: "Supplier name is required",
+    },
+  },
+  websiteUrl: {
+    rules: {
+      url,
+    },
+    messages: {
+      url: "Website url must be a valid url",
     },
   },
   contactName: {
