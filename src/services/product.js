@@ -6,11 +6,13 @@ async function fetchProducts() {
   return await fetch();
 }
 
-async function createProduct(description) {
+async function createProduct(product) {
   const url = "/products";
 
   const request = {
-    description,
+    description: product.description,
+    manufacturerCode: product.manufacturerCode,
+    category: product.category,
   };
 
   const post = getPost(url, request);

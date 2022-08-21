@@ -2,7 +2,7 @@
 import MetisMenu from "metismenujs/dist/metismenujs";
 import simplebar from "simplebar-vue";
 
-import { menuItems } from "./menu";
+import { menuItems } from "@/helpers/menu";
 
 /**
  * Sidebar component

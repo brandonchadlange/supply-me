@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { EventBus } from "../../../libs/eventbus";
+import { EventBus } from "@/libs/eventbus";
 import AppComboboxInput from "./AppComboboxInput.vue";
 import AppComboboxMenu from "./AppComboboxMenu.vue";
 
@@ -117,10 +117,13 @@ export default {
 
 <style lang="scss">
 .combobox {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+
   .combobox-menu {
     position: absolute;
-    top: 70px !important;
-    left: 10px !important;
+    width: 100%;
   }
 }
 </style>

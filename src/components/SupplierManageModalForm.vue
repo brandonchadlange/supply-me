@@ -1,6 +1,6 @@
 <template>
   <b-form @submit.prevent="onSubmit" ref="form">
-    <Field
+    <AppFormField
       label="Name"
       placeholder="Enter supplier name"
       v-model="form.name"
@@ -8,7 +8,7 @@
       :validation="validation.name"
     />
 
-    <Field
+    <AppFormField
       label="Contact name"
       placeholder="Primary contact name"
       v-model="form.contactName"
@@ -17,7 +17,7 @@
       :validation="validation.contactName"
     />
 
-    <Field
+    <AppFormField
       label="Contact email"
       placeholder="Primary contact email"
       v-model="form.contactEmail"
@@ -38,14 +38,14 @@
 </template>
 
 <script>
-import Field from "@/components/form/field.vue";
-import validation from "../../../validation";
-import { EventBus } from "../../../libs/eventbus";
-import events from "./events";
+import AppFormField from "@/components/AppFormField.vue";
+import validation from "@/validation";
+import { EventBus } from "@/libs/eventbus";
+import events from "../helpers/events";
 
 export default {
   components: {
-    Field,
+    AppFormField,
   },
   props: {
     useAllProducts: Boolean,
@@ -77,15 +77,16 @@ export default {
 
       const supplier = await this.$store.dispatch("supplier/create", this.form);
 
-      EventBus.$emit(events.SELECT, {
+      EventBus.$emit(events.supplierManageModal.SELECT, {
         supplier,
         allProducts: this.useAllProducts,
         product: this.product,
       });
-      EventBus.$emit(events.HIDE);
+
+      EventBus.$emit(events.supplierManageModal.HIDE);
     },
     onCancel() {
-      EventBus.$emit(events.HIDE);
+      EventBus.$emit(events.supplierManageModal.HIDE);
     },
     setFormInvalid() {
       this.formInvalid = true;

@@ -1,7 +1,7 @@
 <script>
 import { layoutComputed } from "@/state/helpers";
-import Vertical from "./TheLayoutVertical.vue";
-import Horizontal from "./TheLayout.vue";
+import Vertical from "./LayoutVertical.vue";
+import Horizontal from "./LayoutHorizontal.vue";
 
 /**
  * Main Layout

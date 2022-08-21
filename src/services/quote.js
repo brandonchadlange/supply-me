@@ -1,13 +1,21 @@
-import { getPost } from "../libs/http";
+import { getFetch, getPost } from "../libs/http";
 
-async function createQuoteRequest(productSupplierVariants) {
+async function getQuoteRequests() {
+  return await getFetch("/quote-request")();
+}
+
+async function createQuoteRequest(reference, productSupplierVariants) {
   const url = "/quote-request";
-  const request = productSupplierVariants;
+  const request = {
+    reference,
+    productSupplierVariants
+  };
   const post = getPost(url, request);
   return await post();
 }
 
 const QuotesService = {
+  getQuoteRequests,
   createQuoteRequest,
 };
 

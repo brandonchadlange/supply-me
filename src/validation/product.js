@@ -9,6 +9,14 @@ export default {
       required: "Description is required",
     },
   },
+  manufacturerCode: {
+    rules: {
+      required,
+    },
+    messages: {
+      required: "Manufacturer code is required",
+    },
+  },
   websiteUrl: {
     rules: {
       required,

@@ -1,6 +1,12 @@
 {
   "components": {
-
+    "navbar": {
+      "accountDropdown": {
+        "list": {
+          "logout": "Logout"
+        }
+      }
+    }
   },
   "views": {
     "login": {

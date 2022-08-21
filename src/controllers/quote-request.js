@@ -1,7 +1,6 @@
 // import getUUID from "../utils/getUUID";
 
 class QuoteRequestController {
-  #suppliers = [];
   #products = [];
 
   get products() {
@@ -12,6 +11,11 @@ class QuoteRequestController {
     const product = new Product(data);
     this.#products.push(product);
     return product;
+  }
+
+  removeProduct(product) {
+    const productIndex = this.#products.indexOf(product);
+    this.#products.splice(productIndex, 1);
   }
 
   addSupplierToProduct(supplier, product) {

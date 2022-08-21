@@ -11,7 +11,7 @@ export default [
         if (store.getters["auth/loggedIn"]) {
           // Redirect to the home page instead
           next({
-            name: "home",
+            name: "dashboard",
           });
         } else {
           // Continue to the login page
@@ -30,7 +30,7 @@ export default [
         if (store.getters["auth/loggedIn"]) {
           // Redirect to the home page instead
           next({
-            name: "home",
+            name: "dashboard",
           });
         } else {
           // Continue to the login page
@@ -58,21 +58,21 @@ export default [
   //     },
   //   },
   // },
-  // {
-  //   path: "/logout",
-  //   name: "logout",
-  //   meta: {
-  //     authRequired: true,
-  //     beforeResolve(routeTo, routeFrom, next) {
-  //       localStorage.removeItem("sm:token");
-  //       store.dispatch("auth/loggedOut");
+  {
+    path: "/logout",
+    name: "logout",
+    meta: {
+      authRequired: true,
+      beforeResolve(routeTo, routeFrom, next) {
+        localStorage.removeItem("sm:token");
+        store.dispatch("auth/loggedOut");
 
-  //       next({
-  //         name: "login",
-  //       });
-  //     },
-  //   },
-  // },
+        next({
+          name: "login",
+        });
+      },
+    },
+  },
   // {
   //   path: "/verify-email",
   //   name: "verify-email",
@@ -86,12 +86,44 @@ export default [
   //     authRequired: true,
   //   },
   // },
-  // {
-  //   path: "/quotes/create",
-  //   name: "quotes-create",
-  //   meta: {
-  //     authRequired: true,
-  //   },
-  //   component: () => import("../views/QuotesCreate"),
-  // },
+  {
+    path: "/",
+    name: "dashboard",
+    meta: {
+      authRequired: true,
+    },
+    component: () => import("../views/Dashboard"),
+  },
+  {
+    path: "/quotes",
+    name: "quotes-list",
+    meta: {
+      authRequired: true,
+    },
+    component: () => import("../views/QuotesList"),
+  },
+  {
+    path: "/quotes/create",
+    name: "quotes-create",
+    meta: {
+      authRequired: true,
+    },
+    component: () => import("../views/QuotesCreate"),
+  },
+  {
+    path: "/suppliers",
+    name: "suppliers-list",
+    meta: {
+      authRequired: true,
+    },
+    component: () => import("../views/SuppliersList"),
+  },
+  {
+    path: "/products",
+    name: "products-list",
+    meta: {
+      authRequired: true,
+    },
+    component: () => import("../views/ProductsList"),
+  },
 ];

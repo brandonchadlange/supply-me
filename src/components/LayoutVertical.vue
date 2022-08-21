@@ -2,10 +2,10 @@
 import router from "@/router";
 import { layoutComputed } from "@/state/helpers";
 
-import Topbar from "@/components/topbar";
-import Sidebar from "@/components/side-bar";
-import RightSidebar from "@/components/right-sidebar";
-import Footer from "@/components/footer";
+import Topbar from "@/components/LayoutHorizontalTopBar";
+// import Sidebar from "@/components/LayoutVerticalSideBar.vue";
+import RightSidebar from "@/components/LayoutVerticalRightSideBar.vue";
+import Footer from "@/components/TheFooter";
 
 export default {
   data() {
@@ -15,7 +15,7 @@ export default {
   },
   components: {
     Topbar,
-    Sidebar,
+    // Sidebar,
     RightSidebar,
     Footer,
   },
@@ -61,11 +61,11 @@ export default {
   <!-- Begin page -->
   <div id="layout-wrapper">
     <Topbar />
-    <Sidebar
+    <!-- <Sidebar
       :is-condensed="isMenuCondensed"
       :type="leftSidebarType"
       :width="layoutWidth"
-    />
+    /> -->
     <!-- ============================================================== -->
     <!-- Start right Content here -->
     <!-- ============================================================== -->

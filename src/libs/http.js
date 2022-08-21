@@ -1,4 +1,5 @@
 import axios from "axios";
+import router from "../router";
 
 export function initialiseHTTP() {
   axios.defaults.baseURL = process.env.VUE_APP_API;
@@ -8,9 +9,17 @@ export function initialiseHTTP() {
       "Bearer " + localStorage.getItem("sm:token");
   }
 
-  axios.interceptors.response.use((response) => {
-    return response;
-  });
+  axios.interceptors.response.use(onResponseAccepted, onResponseRejected);
+
+  // axios.interceptors.response.use((response) => {
+  //   console.log(router);
+
+  //   if (response.status === 401) {
+  //     router.push("/logout");
+  //   }
+
+  //   return response;
+  // });
 }
 
 export function setJWTBearerToken(access_token) {
@@ -85,4 +94,20 @@ export function getDelete(url) {
 
     return retval;
   };
+}
+
+function onResponseAccepted(response) {
+  return response;
+}
+
+function onResponseRejected(err) {
+  if (router.currentRoute.name === "login") {
+    throw err;
+  }
+
+  if (err.response.data.status === 401) {
+    router.push("/logout");
+  }
+
+  return err;
 }

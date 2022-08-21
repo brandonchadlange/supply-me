@@ -1,27 +1,11 @@
 <script>
 import simplebar from "simplebar-vue";
-import { menuItems } from "@/helpers/menu";
-
-import { layoutComputed, authFackMethods } from "@/state/helpers";
-
-/**
- * Horizontal-topbar component
- */
 export default {
-  components: { simplebar },
-  props: {
-    type: {
-      type: String,
-      required: true,
-    },
-    width: {
-      type: String,
-      required: true,
-    },
+  components: {
+    simplebar,
   },
   data() {
     return {
-      menuItems: menuItems,
       languages: [
         {
           flag: require("@/assets/images/flags/us.jpg"),
@@ -55,102 +39,18 @@ export default {
       value: null,
     };
   },
-  computed: {
-    ...layoutComputed,
-  },
   mounted() {
     this.value = this.languages.find((x) => x.language === this.$i18n.locale);
     this.text = this.value.title;
     this.flag = this.value.flag;
-    this.activateParentDropdown();
-
-    this.$router.afterEach(() => {
-      this.activateParentDropdown();
-    });
   },
   methods: {
-    ...authFackMethods,
     /**
-     * remove active and mm-active class
+     * Toggle menu
      */
-    _removeAllClass(className) {
-      const els = document.getElementsByClassName(className);
-      while (els[0]) {
-        els[0].classList.remove(className);
-      }
+    toggleMenu() {
+      this.$parent.toggleMenu();
     },
-
-    activateParentDropdown() {
-      const resetParent = (el) => {
-        const parent = el.parentElement;
-        this._removeAllClass("mm-active");
-        this._removeAllClass("mm-show");
-        if (parent) {
-          parent.classList.remove("active");
-          const parent2 = parent.parentElement;
-          if (parent2) {
-            parent2.classList.remove("active");
-            const parent3 = parent2.parentElement;
-            if (parent3) {
-              parent3.classList.remove("active");
-              const parent4 = parent3.parentElement;
-              if (parent4) {
-                parent4.classList.remove("active");
-                const parent5 = parent4.parentElement;
-                if (parent5) {
-                  parent5.classList.remove("active");
-                  const menuelement = document.getElementById(
-                    "topnav-menu-content"
-                  );
-                  if (menuelement !== null)
-                    if (menuelement.classList.contains("show"))
-                      document
-                        .getElementById("topnav-menu-content")
-                        .classList.remove("show");
-                }
-              }
-            }
-          }
-        }
-      };
-      var links = document.getElementsByClassName("side-nav-link-ref");
-      var matchingMenuItem = null;
-      for (let i = 0; i < links.length; i++) {
-        // reset menu
-        resetParent(links[i]);
-      }
-      for (var i = 0; i < links.length; i++) {
-        if (window.location.pathname === links[i].pathname) {
-          matchingMenuItem = links[i];
-          break;
-        }
-      }
-      if (matchingMenuItem) {
-        matchingMenuItem.classList.add("active");
-        var parent = matchingMenuItem.parentElement;
-        if (parent) {
-          parent.classList.add("active");
-          const parent2 = parent.parentElement;
-          if (parent2) {
-            parent2.classList.add("active");
-          }
-          const parent3 = parent2.parentElement;
-          if (parent3) {
-            parent3.classList.add("active");
-            var childAnchor = parent3.querySelector(".has-dropdown");
-            if (childAnchor) childAnchor.classList.add("active");
-          }
-
-          const parent4 = parent3.parentElement;
-          if (parent4) parent4.classList.add("active");
-          const parent5 = parent4.parentElement;
-          if (parent5) parent5.classList.add("active");
-        }
-      }
-    },
-    /**
-     * Full-screen
-     */
     initFullScreen() {
       document.body.classList.toggle("fullscreen-enable");
       if (
@@ -180,36 +80,13 @@ export default {
       }
     },
     /**
-     * Toggle right-sidebar
+     * Toggle rightsidebar
      */
     toggleRightSidebar() {
       this.$parent.toggleRightSidebar();
     },
     /**
-     * Menu clicked show the submenu
-     */
-    onMenuClick(event) {
-      event.preventDefault();
-      const nextEl = event.target.nextElementSibling;
-      if (nextEl) {
-        const parentEl = event.target.parentNode;
-        if (parentEl) {
-          parentEl.classList.remove("show");
-        }
-        nextEl.classList.toggle("show");
-      }
-      return false;
-    },
-
-    /**
-     * Returns true or false if given menu item has child or not
-     * @param item menuItem
-     */
-    hasItems(item) {
-      return item.subItems !== undefined ? item.subItems.length > 0 : false;
-    },
-    /**
-     * Language set
+     * Set languages
      */
     setLanguage(locale, country, flag) {
       this.$i18n.locale = locale;
@@ -217,59 +94,11 @@ export default {
       this.text = country;
       this.flag = flag;
     },
-    toggleMenu() {
-      let element = document.getElementById("topnav-menu-content");
-      element.classList.toggle("show");
-    },
     logoutUser() {
       this.logout();
       this.$router.push({
         path: "/logout",
       });
-    },
-  },
-  watch: {
-    type: {
-      immediate: true,
-      handler(newVal, oldVal) {
-        if (newVal !== oldVal) {
-          switch (newVal) {
-            case "dark":
-              document.body.setAttribute("data-topbar", "dark");
-              break;
-            case "light":
-              document.body.setAttribute("data-topbar", "light");
-              document.body.removeAttribute("data-layout-size", "boxed");
-              break;
-            case "colored":
-              document.body.setAttribute("data-topbar", "colored");
-              document.body.removeAttribute("data-layout-size", "boxed");
-              break;
-            default:
-              document.body.setAttribute("data-topbar", "dark");
-              break;
-          }
-        }
-      },
-    },
-    width: {
-      immediate: true,
-      handler(newVal, oldVal) {
-        if (newVal !== oldVal) {
-          switch (newVal) {
-            case "boxed":
-              document.body.setAttribute("data-layout-size", "boxed");
-              break;
-            case "fluid":
-              document.body.setAttribute("data-layout-mode", "fluid");
-              document.body.removeAttribute("data-layout-size");
-              break;
-            default:
-              document.body.setAttribute("data-layout-mode", "fluid");
-              break;
-          }
-        }
-      },
     },
   },
 };
@@ -301,58 +130,18 @@ export default {
         </div>
 
         <button
-          type="button"
-          class="btn btn-sm px-3 font-size-16 d-lg-none header-item"
-          data-toggle="collapse"
-          data-target="#topnav-menu-content"
           @click="toggleMenu"
+          type="button"
+          class="btn btn-sm px-3 font-size-16 header-item vertical-menu-btn"
+          id="vertical-menu-btn"
         >
           <i class="fa fa-fw fa-bars"></i>
         </button>
 
         <!-- App Search-->
-        <form class="app-search d-none d-lg-block">
-          <div class="position-relative">
-            <input
-              type="text"
-              class="form-control"
-              :placeholder="$t('navbar.search.text')"
-            />
-            <span class="uil-search"></span>
-          </div>
-        </form>
       </div>
 
       <div class="d-flex">
-        <b-dropdown
-          variant="white"
-          class="d-inline-block d-lg-none ms-2"
-          toggle-class="header-item noti-icon"
-          right
-          menu-class="dropdown-menu-lg p-0"
-        >
-          <template v-slot:button-content>
-            <i class="uil-search"></i>
-          </template>
-          <form class="p-3">
-            <div class="form-group m-0">
-              <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  :placeholder="$t('navbar.search.text')"
-                  aria-label="Recipient's username"
-                />
-                <div class="input-group-append">
-                  <button class="btn btn-primary" type="submit">
-                    <i class="mdi mdi-magnify"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </form>
-        </b-dropdown>
-
         <b-dropdown variant="white" right toggle-class="header-item">
           <template v-slot:button-content>
             <img class :src="flag" alt="Header Language" height="16" />
@@ -381,7 +170,7 @@ export default {
           class="d-none d-lg-inline-block ms-1"
           toggle-class="header-item noti-icon"
           right
-          menu-class="dropdown-menu-lg"
+          menu-class="dropdown-menu-lg dropdown-menu-end"
         >
           <template v-slot:button-content>
             <i class="uil-apps"></i>
@@ -450,6 +239,7 @@ export default {
             <i class="uil-minus-path"></i>
           </button>
         </div>
+
         <b-dropdown
           variant="white"
           class="dropdown d-inline-block"
@@ -576,13 +366,15 @@ export default {
             </a>
           </simplebar>
           <div class="p-2 border-top">
-            <a
-              class="btn btn-sm btn-link font-size-14 btn-block text-center"
-              href="javascript:void(0)"
-            >
-              <i class="uil-arrow-circle-right me-1"></i>
-              {{ $t("navbar.dropdown.notification.button") }}
-            </a>
+            <div class="d-grid">
+              <a
+                class="btn btn-sm btn-link font-size-14 text-center"
+                href="javascript:void(0)"
+              >
+                <i class="uil-arrow-circle-right me-1"></i>
+                {{ $t("navbar.dropdown.notification.button") }}
+              </a>
+            </div>
           </div>
         </b-dropdown>
 
@@ -591,6 +383,7 @@ export default {
           toggle-class="header-item"
           right
           variant="white"
+          menu-class="dropdown-menu-end"
         >
           <template v-slot:button-content>
             <img
@@ -629,9 +422,7 @@ export default {
             <span class="align-middle">{{
               $t("navbar.dropdown.marcus.list.settings")
             }}</span>
-            <span class="badge badge-soft-success badge-pill mt-1 ms-2"
-              >03</span
-            >
+            <span class="badge bg-soft-success rounded-pill mt-1 ms-2">03</span>
           </a>
           <a class="dropdown-item" href="#">
             <i
@@ -641,11 +432,7 @@ export default {
               $t("navbar.dropdown.marcus.list.lockscreen")
             }}</span>
           </a>
-          <a
-            class="dropdown-item"
-            href="javascript: void(0);"
-            @click="logoutUser"
-          >
+          <a class="dropdown-item" href="/logout">
             <i
               class="uil uil-sign-out-alt font-size-18 align-middle me-1 text-muted"
             ></i>
@@ -664,110 +451,6 @@ export default {
             <i class="uil-cog toggle-right"></i>
           </button>
         </div>
-      </div>
-    </div>
-
-    <div class="container-fluid">
-      <div class="topnav">
-        <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
-          <div class="collapse navbar-collapse" id="topnav-menu-content">
-            <ul class="navbar-nav">
-              <li
-                class="nav-item dropdown"
-                v-for="(item, index) of menuItems"
-                :key="index"
-              >
-                <router-link
-                  v-if="!item.subItems"
-                  :to="item.link"
-                  class="nav-link dropdown-toggle arrow-none side-nav-link-ref"
-                >
-                  <i :class="`${item.icon} me-2`"></i>
-                  {{ $t(item.label) }}
-                </router-link>
-
-                <a
-                  v-if="item.subItems"
-                  class="nav-link dropdown-toggle arrow-none"
-                  @click="onMenuClick"
-                  href="javascript: void(0);"
-                  id="topnav-components"
-                  role="button"
-                >
-                  <i :class="`${item.icon} me-2`"></i>
-                  {{ $t(item.label) }}
-                  <div class="arrow-down"></div>
-                </a>
-                <div
-                  class="dropdown-menu"
-                  aria-labelledby="topnav-dashboard"
-                  v-if="hasItems(item)"
-                  :class="{
-                    'dropdown-mega-menu-xl px-2': item.subItems.length > 11,
-                  }"
-                >
-                  <template v-for="(subitem, index) of item.subItems">
-                    <router-link
-                      :key="index"
-                      class="col dropdown-item side-nav-link-ref"
-                      v-if="item.subItems.length < 11 && !hasItems(subitem)"
-                      :to="subitem.link"
-                      >{{ $t(subitem.label) }}</router-link
-                    >
-                    <div v-if="item.subItems.length > 11" :key="index">
-                      <div v-if="index % 3 == 0" class="row">
-                        <div class="col-lg-4">
-                          <router-link
-                            class="dropdown-item side-nav-link-ref"
-                            :to="subitem.link"
-                            >{{ $t(item.subItems[index].label) }}</router-link
-                          >
-                        </div>
-                        <div class="col-lg-4" v-if="item.subItems[index + 1]">
-                          <router-link
-                            class="dropdown-item side-nav-link-ref"
-                            :to="item.subItems[index + 1].link"
-                            >{{
-                              $t(item.subItems[index + 1].label)
-                            }}</router-link
-                          >
-                        </div>
-                        <div class="col-lg-4" v-if="item.subItems[index + 2]">
-                          <router-link
-                            class="dropdown-item side-nav-link-ref"
-                            :to="item.subItems[index + 2].link"
-                            >{{
-                              $t(item.subItems[index + 2].label)
-                            }}</router-link
-                          >
-                        </div>
-                      </div>
-                    </div>
-                    <div class="dropdown" v-if="hasItems(subitem)" :key="index">
-                      <a
-                        class="dropdown-item"
-                        href="javascript: void(0);"
-                        @click="onMenuClick"
-                      >
-                        {{ $t(subitem.label) }}
-                        <div class="arrow-down"></div>
-                      </a>
-                      <div class="dropdown-menu">
-                        <router-link
-                          v-for="(subSubitem, index) of subitem.subItems"
-                          :key="index"
-                          :to="subSubitem.link"
-                          class="dropdown-item side-nav-link-ref"
-                          >{{ $t(subSubitem.label) }}</router-link
-                        >
-                      </div>
-                    </div>
-                  </template>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </nav>
       </div>
     </div>
   </header>

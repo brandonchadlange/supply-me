@@ -1,9 +1,9 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-// import AuthService from "../services/auth";
+import AuthService from "../services/auth";
 
 import VueMeta from "vue-meta";
-// import store from "@/state/store";
+import store from "@/state/store";
 
 import routes from "./routes";
 
@@ -29,64 +29,20 @@ const router = new VueRouter({
 
 // Before each route evaluates...
 router.beforeEach(async (routeTo, routeFrom, next) => {
-  // const authRequired = routeTo.matched.some((route) => route.meta.authRequired);
+  const authRequired = routeTo.matched.some((route) => route.meta.authRequired);
 
-  return next();
+  if (!authRequired) return next();
 
-  // if (!authRequired) return next();
+  if (store.getters["auth/loggedIn"]) {
+    const valid = await AuthService.validate();
 
-  // if (store.getters["auth/loggedIn"]) {
-  //   return next();
-  // }
+    if (valid.data) {
+      return next();
+    }
+  }
 
-  // const valid = await AuthService.validate();
-
-  // if (valid.data) {
-  //   return next();
-  // }
-
-  // redirectToLogin();
-
-  // if (store.getters["auth/loggedIn"]) {
-  //   const valid = await AuthService.validate();
-
-  //   if (!valid.data) {
-  //     redirectToLogin();
-  //     return;
-  //   }
-
-  //   if (!store.getters["user/profileFetched"]) {
-  //     await store.dispatch("user/fetchProfile");
-  //   }
-
-  //   const profile = store.getters["user/profile"];
-
-  //   if (!profile.onboardingComplete) {
-  //     next("/onboarding");
-  //     return;
-  //   }
-
-  //   return next({
-  //     params: {
-  //       project: profile.defaultProject.slug,
-  //     },
-  //   });
-  // }
-
-  // eslint-disable-next-line no-unused-vars
-  // eslint-disable-next-line no-inner-declarations
-  // function redirectToLogin() {
-  //   localStorage.removeItem("sm:token");
-  //   store.dispatch("auth/loggedOut");
-
-  //   // Pass the original route to the login component
-  //   next({
-  //     name: "login",
-  //     query: {
-  //       redirectFrom: routeTo.fullPath,
-  //     },
-  //   });
-  // }
+  store.dispatch("auth/loggedOut");
+  return next("/login");
 });
 
 router.beforeResolve(async (routeTo, routeFrom, next) => {

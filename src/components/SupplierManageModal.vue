@@ -36,12 +36,12 @@
 </template>
 
 <script>
-import IDENTIFIER from "./identifier";
+const IDENTIFIER = 'supplier-manage-modal';
 
-import { EventBus } from "../../../libs/eventbus";
-import CreateForm from "./form.vue";
-import SupplierSelect from "./select.vue";
-import events from "./events";
+import { EventBus } from "@/libs/eventbus";
+import CreateForm from "./SupplierManageModalForm.vue";
+import SupplierSelect from "./SupplierManageModalSelect.vue";
+import events from "@/helpers/events";
 
 export default {
   components: {
@@ -52,12 +52,12 @@ export default {
     suppliers: Array,
   },
   mounted() {
-    EventBus.$on(events.SHOW, this.showDialog.bind(this));
-    EventBus.$on(events.HIDE, this.hideDialog.bind(this));
+    EventBus.$on(events.supplierManageModal.SHOW, this.showDialog.bind(this));
+    EventBus.$on(events.supplierManageModal.HIDE, this.hideDialog.bind(this));
   },
   beforeDestroy() {
-    EventBus.$off(events.SHOW, this.showDialog.bind(this));
-    EventBus.$off(events.HIDE, this.hideDialog.bind(this));
+    EventBus.$off(events.supplierManageModal.SHOW, this.showDialog.bind(this));
+    EventBus.$off(events.supplierManageModal.HIDE, this.hideDialog.bind(this));
   },
   data() {
     return {

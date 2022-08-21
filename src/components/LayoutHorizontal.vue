@@ -1,7 +1,7 @@
 <script>
-import HorizontalTopbar from "@/components/horizontal-topbar";
-import RightBar from "@/components/right-sidebar";
-import Footer from "@/components/footer";
+import HorizontalTopbar from "@/components/LayoutHorizontalTopBar";
+import RightBar from "@/components/LayoutVerticalRightSideBar";
+import Footer from "@/components/TheFooter";
 
 import { layoutComputed } from "@/state/helpers";
 

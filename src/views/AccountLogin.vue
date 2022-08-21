@@ -6,7 +6,7 @@ import AppForm from "@/components/AppForm.vue";
 import AppFormField from "@/components/AppFormField";
 import validation from "@/validation";
 import { EventBus } from "@/libs/eventbus";
-import { setProjectIdHeader } from "@/libs/http";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -22,25 +22,31 @@ export default {
         email: "",
         password: "",
       },
-      authError: null,
-      isAuthError: false,
       validation: validation.login,
     };
+  },
+  computed: {
+    ...mapGetters({
+      hasError: "auth/hasError",
+      error: "auth/error",
+    }),
   },
   methods: {
     async tryToLogIn() {
       this.$store.dispatch("auth/logIn", this.form);
     },
     async onLogin() {
-      const profile = await this.$store.dispatch("user/fetchProfile");
+      // const profile = await this.$store.dispatch("user/fetchProfile");
 
-      if (!profile.onboardingComplete) {
-        this.$router.push("/onboarding");
-        return;
-      }
+      this.$router.push("/");
 
-      setProjectIdHeader(profile.defaultProject.id);
-      this.$router.push("/" + profile.defaultProject.slug);
+      // if (!profile.onboardingComplete) {
+      //   this.$router.push("/onboarding");
+      //   return;
+      // }
+
+      // setProjectIdHeader(profile.defaultProject.id);
+      // this.$router.push("/" + profile.defaultProject.slug);
     },
   },
   mounted() {
@@ -69,11 +75,11 @@ export default {
               </div>
               <div class="p-2 mt-4">
                 <b-alert
-                  v-model="isAuthError"
+                  v-model="hasError"
                   variant="danger"
                   class="mt-3"
                   dismissible
-                  >{{ authError }}</b-alert
+                  >{{ error }}</b-alert
                 >
 
                 <AppForm :onSubmit="tryToLogIn">

@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import { EventBus } from "../../../libs/eventbus";
-import events from "./events";
+import { EventBus } from "@/libs/eventbus";
+import events from "@/helpers/events";
 
 export default {
   props: {
@@ -76,7 +76,7 @@ export default {
     selectSupplier(supplier) {
       this.selected.push(supplier.id);
 
-      EventBus.$emit(events.SELECT, {
+      EventBus.$emit(events.supplierManageModal.SELECT, {
         supplier,
         allProducts: this.useAllProducts,
         product: this.product,
@@ -89,14 +89,14 @@ export default {
 
       this.selected.splice(this.selected.indexOf(supplier.id), 1);
 
-      EventBus.$emit(events.DESELECT, {
+      EventBus.$emit(events.supplierManageModal.DESELECT, {
         supplier: ref,
         allProducts: this.useAllProducts,
         product: this.product,
       });
     },
     onCancel() {
-      EventBus.$emit(events.HIDE);
+      EventBus.$emit(events.supplierManageModal.HIDE);
     },
   },
 };

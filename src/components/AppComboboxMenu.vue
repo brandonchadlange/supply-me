@@ -44,8 +44,8 @@
 </template>
 
 <script>
-import { EventBus } from "../../../libs/eventbus";
-import { filterWithoutLabel, filterWithLabel } from "./filters";
+import { EventBus } from "@/libs/eventbus";
+// import { filterWithoutLabel, filterWithLabel } from "./filters";
 
 export default {
   props: {
@@ -88,9 +88,14 @@ export default {
         return [];
       }
 
-      return this.useLabel
-        ? filterWithLabel(this.label, search, this.items)
-        : filterWithoutLabel(search, this.items);
+      return this.items.filter(e => {
+        const field = e[this.label].toLowerCase();
+        return field.includes(search) || search.includes(field);
+      });
+
+      // return this.useLabel
+      //   ? filterWithLabel(this.label, search, this.items)
+      //   : filterWithoutLabel(search, this.items);
     },
     hasExactMatch() {
       const search = this.search.toLowerCase();

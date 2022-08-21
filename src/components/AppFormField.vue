@@ -3,6 +3,7 @@
     <b-form-group>
       <label :for="field">{{ label }}</label>
       <b-form-input
+        ref="input"
         :id="field"
         v-model="input"
         :placeholder="placeholder"
@@ -13,7 +14,7 @@
       ></b-form-input>
       <div v-if="submitted && $v.$error" class="invalid-feedback">
         <span v-for="error in errors" :key="error.key">
-          <span v-if="!$v.input[error.key]">{{ $t(error.message) }}</span>
+          <span v-if="!$v.input[error.key]">{{ error.message }}</span>
         </span>
       </div>
     </b-form-group>
@@ -76,10 +77,13 @@ export default {
         EventBus.$emit("form:invalid");
       }
     },
+    focus() {
+      this.$refs.input.focus();
+    },
   },
   validations() {
     return {
-      input: this.validation.rules,
+      input: this.validation.rules || null,
     };
   },
 };
